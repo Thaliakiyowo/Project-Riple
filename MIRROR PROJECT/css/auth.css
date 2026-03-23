@@ -1,11 +1,11 @@
-/* ================================================
+﻿/* 
    auth.css  —  RIPPLE Auth Pages Shared Styles
    Used by: login.html, register.html
-   ================================================ */
+    */
 
-/* ================================
+/* 
    ROOT & BASE
-   ================================ */
+    */
 *,
 *::before,
 *::after {
@@ -46,9 +46,9 @@ a {
   color: inherit;
 }
 
-/* ================================
+/* 
    ANIMATED BACKGROUND
-   ================================ */
+    */
 .bg-layer {
   position: fixed;
   inset: 0;
@@ -88,7 +88,7 @@ a {
     linear-gradient(180deg, rgba(8, 7, 10, 0.2) 0%, rgba(8, 7, 10, 0.75) 100%);
 }
 
-/* ─── Floating Particles ─── */
+/*  Floating Particles  */
 .particles-bg {
   position: fixed;
   inset: 0;
@@ -124,9 +124,9 @@ a {
   }
 }
 
-/* ================================
+/* 
    NAVBAR
-   ================================ */
+    */
 .navbar {
   position: fixed;
   top: 0;
@@ -176,9 +176,9 @@ a {
   transform: translateX(-3px);
 }
 
-/* ================================
+/* 
    PAGE LAYOUT — SPLIT SCREEN
-   ================================ */
+    */
 .page-wrapper {
   position: relative;
   z-index: 1;
@@ -186,20 +186,21 @@ a {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-items: stretch;
 }
 
-/* ─── Left visual panel ─── */
+/*  Left visual panel  */
 .auth-visual {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   padding: 100px 56px 60px;
-  border-right: 1px solid var(--border);
+  border-right: 1px solid rgba(243, 112, 30, 0.2);
   overflow: hidden;
-  gap: 40px;
-  min-height: 100vh;
+  gap: 24px;
+  background: rgba(243, 112, 30, 0.03);
 }
 
 /* Subtle gradient fill for visual panel */
@@ -225,8 +226,8 @@ a {
 
 .auth-visual-earth {
   position: relative;
-  width: 340px;
-  height: 340px;
+  width: 280px;
+  height: 280px;
   flex-shrink: 0;
 }
 
@@ -409,13 +410,12 @@ a {
   letter-spacing: 1px;
 }
 
-/* ─── Right form panel ─── */
+/*  Right form panel  */
 .auth-form-panel {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 100px 56px 60px;
-  min-height: 100vh;
   overflow-y: auto;
 }
 
@@ -428,9 +428,9 @@ a {
   gap: 28px;
 }
 
-/* ================================
+/* 
    HEADER
-   ================================ */
+    */
 .auth-header {
   text-align: center;
 }
@@ -486,9 +486,9 @@ a {
   line-height: 1.7;
 }
 
-/* ================================
+/* 
    AUTH CARD
-   ================================ */
+    */
 .auth-card {
   width: 100%;
   background: rgba(255, 255, 255, 0.028);
@@ -536,9 +536,9 @@ a {
   pointer-events: none;
 }
 
-/* ================================
+/* 
    FORM ELEMENTS
-   ================================ */
+    */
 .form {
   display: flex;
   flex-direction: column;
@@ -629,7 +629,7 @@ a {
   color: var(--orange);
 }
 
-/* ─── Password Toggle ─── */
+/*  Password Toggle  */
 .password-wrap {
   position: relative;
 }
@@ -652,7 +652,7 @@ a {
   color: var(--orange);
 }
 
-/* ─── Password Strength ─── */
+/*  Password Strength  */
 .strength-bar {
   display: flex;
   gap: 4px;
@@ -675,7 +675,7 @@ a {
   transition: color 0.3s;
 }
 
-/* ─── Field Hint (error message) ─── */
+/*  Field Hint (error message)  */
 .field-hint {
   font-size: 11px;
   color: var(--red);
@@ -689,9 +689,9 @@ a {
   display: flex;
 }
 
-/* ================================
+/* 
    OPTIONS ROW (login only)
-   ================================ */
+    */
 .form-options {
   display: flex;
   align-items: center;
@@ -708,9 +708,9 @@ a {
   color: var(--orange);
 }
 
-/* ================================
+/* 
    CHECKBOX
-   ================================ */
+    */
 .checkbox-label {
   display: flex;
   align-items: flex-start;
@@ -770,9 +770,9 @@ a {
   text-shadow: 0 0 12px rgba(243, 112, 30, 0.6);
 }
 
-/* ================================
+/* 
    SUBMIT BUTTON
-   ================================ */
+    */
 .btn-submit {
   width: 100%;
   padding: 15px;
@@ -822,9 +822,9 @@ a {
   transform: none;
 }
 
-/* ================================
+/* 
    DIVIDER
-   ================================ */
+    */
 .divider {
   display: flex;
   align-items: center;
@@ -843,9 +843,9 @@ a {
   background: var(--border);
 }
 
-/* ================================
+/* 
    SOCIAL BUTTONS
-   ================================ */
+    */
 .social-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -879,9 +879,9 @@ a {
   flex-shrink: 0;
 }
 
-/* ================================
+/* 
    FOOTER LINK
-   ================================ */
+    */
 .auth-footer {
   text-align: center;
   font-size: 13px;
@@ -898,9 +898,9 @@ a {
   text-shadow: 0 0 16px rgba(243, 112, 30, 0.7);
 }
 
-/* ================================
+/* 
    EARTH BADGE (login only)
-   ================================ */
+    */
 .earth-badge {
   display: flex;
   align-items: center;
@@ -930,9 +930,9 @@ a {
   margin-bottom: 2px;
 }
 
-/* ================================
+/* 
    PERKS BADGE (register only)
-   ================================ */
+    */
 .perks-badge {
   width: 100%;
   display: grid;
@@ -965,9 +965,9 @@ a {
   line-height: 1.4;
 }
 
-/* ================================
+/* 
    SUCCESS OVERLAY (register only)
-   ================================ */
+    */
 .success-overlay {
   display: none;
   position: fixed;
@@ -1024,9 +1024,9 @@ a {
   text-align: center;
 }
 
-/* ================================
+/* 
    RESPONSIVE
-   ================================ */
+    */
 @media (max-width: 900px) {
   .page-wrapper {
     grid-template-columns: 1fr;

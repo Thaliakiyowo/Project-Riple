@@ -7,19 +7,15 @@
   <title>RIPPLE — Earth Mirror</title>
   <meta name="description" content="Lihat bagaimana kebiasaanmu membentuk Bumi masa depan. Earth Mirror by RIPPLE.">
   <link rel="stylesheet" href="css/style.css">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap"
-    rel="stylesheet">
-  <!-- Lottie Player -->
+  <link rel="stylesheet" href="css/wild.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
 </head>
 
 <body>
 
-  <!-- FLOATING PARTICLES BACKGROUND -->
   <div class="particles-bg" id="particlesBg"></div>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <div class="logo">RIPPLE</div>
     <div class="nav-links">
@@ -27,46 +23,30 @@
       <a href="input.html">Daily Input</a>
       <a href="mirror.html" class="active">Earth Mirror</a>
       <a href="global.html">Global Ripple</a>
+      <a href="about.html">About Us</a>
     </div>
   </nav>
 
-  <!-- TICKER BAR -->
   <div class="ticker-bar">
     <div class="ticker-label">LIVE</div>
     <div class="ticker-track">
-      <div class="ticker-content" id="tickerContent">
-        🌱 12.847 pohon ditanam hari ini &nbsp;·&nbsp;
-        🔥 CO₂ global: 417 ppm &nbsp;·&nbsp;
-        💧 1 dari 3 orang kekurangan air bersih &nbsp;·&nbsp;
-        🌡️ Suhu bumi +1.2°C dari era pra-industri &nbsp;·&nbsp;
-        ♻️ Hanya 9% plastik yang pernah didaur ulang &nbsp;·&nbsp;
-        🐠 50% terumbu karang hilang sejak 1950 &nbsp;·&nbsp;
-        📚 258 juta anak tidak mengenyam pendidikan &nbsp;·&nbsp;
-        💡 Energi terbarukan tumbuh 10% per tahun &nbsp;·&nbsp;
-        🌍 Generasi Z 2050 = penentu nasib planet ini &nbsp;·&nbsp;
-      </div>
+      <div class="ticker-content" id="tickerContent"></div>
     </div>
   </div>
 
-  <!-- HERO — Full Screen Cinematic -->
   <section class="hero">
     <div class="hero-content">
       <p class="hero-tag">Earth Mirror &nbsp;·&nbsp; Bumi Versi Kamu</p>
       <h1 class="hero-title">Setiap <em>pilihanmu</em><br>membentuk <em>dunia</em></h1>
-      <p class="hero-sub">Satu kebiasaan kecil menciptakan gelombang perubahan ke seluruh penjuru bumi. Lihat dampakmu
-        sekarang.</p>
+      <p class="hero-sub">Satu kebiasaan kecil menciptakan gelombang perubahan ke seluruh penjuru bumi. Lihat dampakmu sekarang.</p>
     </div>
 
-    <!-- RIGHT VISUAL -->
     <div class="hero-visual">
-
-      <!-- LIVE badge -->
       <div class="hv-live-badge">
         <span class="hv-live-dot"></span>
         <span>LIVE EARTH DATA</span>
       </div>
 
-      <!-- Globe -->
       <div class="hero-globe">
         <div class="hg-ring hg-ring-1"></div>
         <div class="hg-ring hg-ring-2"></div>
@@ -81,7 +61,6 @@
         <div class="hg-dot hg-dot-3"></div>
       </div>
 
-      <!-- Floating stat cards -->
       <div class="hg-stat hg-stat-top-left">
         <span class="hg-stat-icon">🌡️</span>
         <div>
@@ -125,39 +104,30 @@
         </div>
       </div>
 
-      <!-- Scatter sparkle dots -->
       <div class="hv-spark hv-spark-1"></div>
       <div class="hv-spark hv-spark-2"></div>
       <div class="hv-spark hv-spark-3"></div>
       <div class="hv-spark hv-spark-4"></div>
       <div class="hv-spark hv-spark-5"></div>
 
-      <!-- Progress arc label -->
       <div class="hv-arc-label">
         <span class="hv-arc-num">258M</span>
         <span class="hv-arc-desc">anak tanpa akses<br>pendidikan</span>
       </div>
-
     </div>
   </section>
 
-
-
-  <!-- MAIN GRID -->
   <main class="main-grid">
 
-    <!-- CARD KIRI: EARTH MIRROR -->
     <div class="card card-left reveal-left">
       <p class="card-label">Status Bumiku</p>
 
-      <!-- Globe Lottie -->
       <div class="earth-wrap">
         <div class="earth-ring"></div>
         <div class="earth-ring-2"></div>
         <div class="earth-ring-3"></div>
         <div class="earth-lottie">
-          <dotlottie-wc src="https://lottie.host/cc3e3d97-8372-427a-893f-2bcb9197d12a/b1a8pOk6qF.lottie" autoplay loop>
-          </dotlottie-wc>
+          <dotlottie-wc src="https://lottie.host/cc3e3d97-8372-427a-893f-2bcb9197d12a/b1a8pOk6qF.lottie" autoplay loop></dotlottie-wc>
         </div>
         <div class="earth-score-overlay">
           <span class="earth-score" id="earthScore">0%</span>
@@ -165,7 +135,6 @@
         </div>
       </div>
 
-      <!-- Stats Grid dengan Progress Bar -->
       <div class="stats-grid">
         <div class="stat green" id="stat-lingkungan">
           <p class="stat-name">🌿 Lingkungan</p>
@@ -197,15 +166,13 @@
         </div>
       </div>
 
-      <!-- FAKTA BUMI: Rotating facts -->
       <div class="fakta-bumi-box">
         <div class="fakta-header">
           <span class="fakta-badge">📡 FAKTA BUMI</span>
           <span class="fakta-counter"><span id="faktaIndex">1</span>/6</span>
         </div>
         <div class="fakta-content" id="faktaContent">
-          <p class="fakta-text" id="faktaText">Setiap menit, 36 lapangan sepak bola hutan tropis ditebang di seluruh
-            dunia.</p>
+          <p class="fakta-text" id="faktaText">Setiap menit, 36 lapangan sepak bola hutan tropis ditebang di seluruh dunia.</p>
         </div>
         <div class="fakta-dots" id="faktaDots">
           <span class="fdot active"></span>
@@ -217,7 +184,6 @@
         </div>
       </div>
 
-      <!-- DAMPAK KOLEKTIF: Live counter -->
       <div class="dampak-kolektif">
         <p class="dampak-title">🌐 Dampak Kolektif Indonesia Hari Ini</p>
         <div class="dampak-grid">
@@ -242,17 +208,13 @@
 
       <div class="quote-box">
         <div class="quote-icon">💬</div>
-        <p id="quoteText">"Kalau 10 juta pelajar Indonesia hidup seperti kamu, Indonesia di 2050 akan berada di posisi
-          ke-12 dunia
-          dalam indeks keberlanjutan."</p>
+        <p id="quoteText">"Kalau 10 juta pelajar Indonesia hidup seperti kamu, Indonesia di 2050 akan berada di posisi ke-12 dunia dalam indeks keberlanjutan."</p>
       </div>
     </div>
 
-    <!-- CARD KANAN: AI BUTTERFLY EFFECT -->
     <div class="card card-right reveal-right">
       <p class="card-label">Butterfly Effect AI</p>
 
-      <!-- AI Chat Input Area -->
       <div class="ai-area">
         <div class="ai-header">
           <div class="ai-avatar">
@@ -266,7 +228,6 @@
           <div class="ai-indicator" id="aiIndicator"></div>
         </div>
 
-        <!-- Chat history -->
         <div class="ai-chat-history" id="aiChatHistory">
           <div class="ai-bubble system-bubble">
             <p>Ceritakan satu kebiasaan yang kamu lakukan hari ini 🌱<br>
@@ -274,7 +235,6 @@
           </div>
         </div>
 
-        <!-- Quick suggest chips -->
         <div class="ai-chips" id="aiChips">
           <button class="chip" onclick="sendChip('Aku jalan kaki ke sekolah tiap hari')">🚶 Jalan kaki</button>
           <button class="chip" onclick="sendChip('Aku belajar 2 jam ekstra setiap malam')">📚 Belajar ekstra</button>
@@ -284,13 +244,10 @@
           <button class="chip" onclick="sendChip('Aku buang sampah sembarangan')">🚮 Buang sampah</button>
         </div>
 
-        <!-- Input bar -->
         <div class="ai-input-bar">
-          <textarea id="aiInput" class="ai-input" placeholder="Ceritakan kebiasaanmu di sini..." rows="1"
-            maxlength="200"></textarea>
+          <textarea id="aiInput" class="ai-input" placeholder="Ceritakan kebiasaanmu di sini..." rows="1" maxlength="200"></textarea>
           <button class="ai-send-btn" id="aiSendBtn" onclick="handleAiSend()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-              stroke-linecap="round" stroke-linejoin="round">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="22" y1="2" x2="11" y2="13"></line>
               <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
             </svg>
@@ -298,17 +255,13 @@
         </div>
       </div>
 
-      <!-- IDLE STATE: visible before first message -->
       <div class="ai-idle-state" id="aiIdleState">
-
-        <!-- Live pulse header -->
         <div class="idle-pulse-row">
           <span class="idle-live-dot"></span>
           <span class="idle-live-label">LIVE EARTH PULSE</span>
           <span class="idle-live-time" id="idleTime">18:42:25</span>
         </div>
 
-        <!-- Animated metric counters -->
         <div class="idle-metrics">
           <div class="idle-metric">
             <span class="idle-num" id="idleCO2">417.2</span>
@@ -327,50 +280,34 @@
           </div>
         </div>
 
-        <!-- Activity feed -->
         <div class="idle-feed-header">
           <span class="idle-feed-dot"></span>
           <span>Yang sedang terjadi di dunia...</span>
         </div>
-        <div class="idle-feed" id="idleFeed">
-          <!-- JS will inject animated items here -->
-        </div>
+        <div class="idle-feed" id="idleFeed"></div>
 
-        <!-- Prompt tip -->
         <div class="idle-tip">
           <span class="idle-tip-arrow">↑</span>
           <span>Ketik kebiasaanmu di atas untuk melihat dampaknya</span>
         </div>
-
       </div>
 
-      <!-- AI Result: Chain + Impact -->
       <div class="ai-result" id="aiResult" style="display:none;">
-
         <div class="ai-result-label" id="aiResultLabel"></div>
-        <!-- Chain domino effect -->
         <div class="chain" id="chainList"></div>
-
-        <!-- Impact Summary Box -->
         <div class="impact-summary" id="impactSummary" style="display:none;">
           <p class="impact-title">📊 Dampak Nyatamu dalam 1 Tahun</p>
           <div class="impact-grid" id="impactGrid"></div>
         </div>
-
-        <!-- Star glow -->
         <div class="chain-final-lottie" id="chainFinalLottie" style="display:none;">
-          <dotlottie-wc src="https://lottie.host/cb1b8959-c145-44ff-8712-a855a586a329/797IygCjbx.lottie" autoplay loop>
-          </dotlottie-wc>
+          <dotlottie-wc src="https://lottie.host/cb1b8959-c145-44ff-8712-a855a586a329/797IygCjbx.lottie" autoplay loop></dotlottie-wc>
           <p class="chain-final-text">Gelombangmu dirasakan seluruh dunia 🌏</p>
         </div>
       </div>
-
     </div>
-
 
   </main>
 
-  <!-- SECTION: PROYEKSI 2050 -->
   <section class="proyeksi-section reveal">
     <div class="proyeksi-header">
       <p class="proyeksi-label">PROYEKSI INDONESIA 2050</p>
@@ -413,7 +350,6 @@
     </div>
   </section>
 
-  <!-- BOTTOM CTA -->
   <section class="bottom-cta reveal">
     <div class="cta-card">
       <div>
@@ -424,8 +360,14 @@
     </div>
   </section>
 
+  <div id="horrorBanner">⚠ PERINGATAN — BUMI DALAM KONDISI KRITIS — EARTH SCORE SANGAT RENDAH ⚠</div>
+
+
+
+  <div id="mirrorStars"></div>
+
   <script src="js/main.js"></script>
-
+  <script src="js/mirror-features.js"></script>
+  <script src="js/wild.js"></script>
 </body>
-
 </html>

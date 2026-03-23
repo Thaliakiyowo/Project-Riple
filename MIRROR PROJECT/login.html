@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
   <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/wild.css">
 </head>
 
 <body>
@@ -39,7 +40,7 @@
   <!-- SPLIT LAYOUT -->
   <div class="page-wrapper">
 
-    <!-- ═══ LEFT: VISUAL PANEL ═══ -->
+    <!--  LEFT: VISUAL PANEL  -->
     <div class="auth-visual">
 
       <div class="auth-visual-logo">RIPPLE</div>
@@ -83,7 +84,7 @@
 
     </div>
 
-    <!-- ═══ RIGHT: FORM PANEL ═══ -->
+    <!--  RIGHT: FORM PANEL  -->
     <div class="auth-form-panel">
       <div class="auth-container">
 
@@ -194,5 +195,362 @@
 
   <script src="js/auth.js"></script>
 
+  <!-- 
+       BIOMETRIC SCAN OVERLAY
+   -->
+  <div id="bioScan" style="
+    display:none; position:fixed; inset:0; z-index:9999;
+    background:rgba(5,4,8,0.96); backdrop-filter:blur(20px);
+    flex-direction:column; align-items:center; justify-content:center;
+    font-family:'Inter',sans-serif;
+  ">
+    <div id="bioFrame" style="
+      width:220px; height:260px; border:2px solid #f3701e;
+      border-radius:16px; position:relative; overflow:hidden;
+      box-shadow:0 0 60px rgba(243,112,30,0.3);
+    ">
+      <!-- Retina grid -->
+      <svg width="220" height="260" style="position:absolute;top:0;left:0;opacity:0.15">
+        <defs><pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M20 0L0 0 0 20" fill="none" stroke="#f3701e" stroke-width="0.5"/>
+        </pattern></defs>
+        <rect width="220" height="260" fill="url(#g)"/>
+      </svg>
+      <!-- Corner brackets -->
+      <svg width="220" height="260" style="position:absolute;top:0;left:0">
+        <polyline points="0,30 0,0 30,0" fill="none" stroke="#f3701e" stroke-width="3"/>
+        <polyline points="190,0 220,0 220,30" fill="none" stroke="#f3701e" stroke-width="3"/>
+        <polyline points="0,230 0,260 30,260" fill="none" stroke="#f3701e" stroke-width="3"/>
+        <polyline points="190,260 220,260 220,230" fill="none" stroke="#f3701e" stroke-width="3"/>
+      </svg>
+      <!-- Face outline -->
+      <svg width="220" height="260" style="position:absolute;top:0;left:0;opacity:0.25">
+        <ellipse cx="110" cy="120" rx="55" ry="70" fill="none" stroke="#f3701e" stroke-width="1.5"/>
+        <circle cx="88" cy="105" r="8" fill="none" stroke="#f3701e" stroke-width="1"/>
+        <circle cx="132" cy="105" r="8" fill="none" stroke="#f3701e" stroke-width="1"/>
+        <path d="M90 145 Q110 160 130 145" fill="none" stroke="#f3701e" stroke-width="1.5"/>
+        <line x1="110" y1="50" x2="110" y2="70" stroke="#f3701e" stroke-width="1"/>
+        <line x1="62" y1="120" x2="42" y2="120" stroke="#f3701e" stroke-width="1"/>
+        <line x1="158" y1="120" x2="178" y2="120" stroke="#f3701e" stroke-width="1"/>
+      </svg>
+      <!-- Scan laser line -->
+      <div id="bioLaser" style="
+        position:absolute; left:0; right:0; height:2px;
+        background:linear-gradient(90deg,transparent,#f3701e,rgba(243,112,30,0.4),transparent);
+        box-shadow:0 0 12px #f3701e; top:0;
+        animation:laserScan 1.8s ease-in-out infinite;
+      "></div>
+    </div>
+    <!-- Status text -->
+    <div id="bioStatus" style="margin-top:24px;text-align:center">
+      <div id="bioLabel" style="font-family:'Orbitron',sans-serif;font-size:13px;color:#f3701e;letter-spacing:3px;margin-bottom:8px">SCANNING</div>
+      <div style="width:200px;height:3px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden">
+        <div id="bioProgress" style="height:100%;background:#f3701e;width:0;transition:width 0.1s;border-radius:3px"></div>
+      </div>
+      <div id="bioPct" style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:6px;font-family:'Orbitron',sans-serif">0%</div>
+    </div>
+    <!-- Result -->
+    <div id="bioResult" style="display:none;margin-top:20px;font-size:22px;font-weight:800;letter-spacing:4px"></div>
+  </div>
+
+  <!-- TERMINAL HACKER OVERLAY -->
+  <div id="terminalOverlay" style="
+    display:none; position:fixed; inset:0; z-index:9998;
+    background:#000; font-family:'Courier New',monospace;
+    padding:40px; overflow:hidden;
+    color:#00ff41; font-size:13px; line-height:1.8;
+  ">
+    <div style="position:absolute;top:20px;right:20px;opacity:0.4;font-size:11px">ESC or ↑↑↓↓←→←→BA to exit</div>
+    <pre id="termOut" style="margin:0"></pre>
+  </div>
+
+  <style>
+    @keyframes laserScan {
+      0%   { top: 0; }
+      50%  { top: calc(100% - 2px); }
+      100% { top: 0; }
+    }
+
+    /* #2 — Planet health via CSS vars on .bg-layer */
+    .bg-layer { transition: filter 1.2s ease; }
+    .bg-layer.pwd-dead    { filter: brightness(0.2) saturate(0) hue-rotate(0deg); }
+    .bg-layer.pwd-fire    { filter: brightness(0.7) saturate(1.8) hue-rotate(-30deg); }
+    .bg-layer.pwd-caution { filter: brightness(0.85) saturate(1.2) hue-rotate(20deg); }
+    .bg-layer.pwd-healthy { filter: brightness(1.1) saturate(1.5) hue-rotate(80deg); }
+
+    /* #4 — Shake + glitch */
+    @keyframes cardShake {
+      0%,100% { transform:translateX(0); }
+      10%,50%,90%  { transform:translateX(-10px); }
+      30%,70%      { transform:translateX(10px); }
+    }
+    @keyframes glitchTxt {
+      0%   { text-shadow: 2px 0 #ff0040, -2px 0 #00ffff; }
+      25%  { text-shadow: -3px 0 #ff0040, 3px 0 #00ffff; }
+      50%  { text-shadow: 3px 0 #ff0040, -3px 0 #00ffff; }
+      75%  { text-shadow: -2px 0 #ff0040, 2px 0 #00ffff; }
+      100% { text-shadow: 0 0 0; }
+    }
+    .card-shake { animation: cardShake 0.5s ease; }
+    .glitch-text { animation: glitchTxt 0.5s steps(2) forwards; }
+    @keyframes borderFlash {
+      0%,100%  { border-color: rgba(255,255,255,0.06); }
+      25%,75%  { border-color: rgba(255,60,60,0.8); box-shadow: 0 0 30px rgba(255,0,0,0.3); }
+    }
+    .card-flash { animation: borderFlash 0.5s ease; }
+
+    /* Konami terminal scanlines */
+    #terminalOverlay::before {
+      content:'';
+      position:absolute;
+      inset:0;
+      background:repeating-linear-gradient(transparent,transparent 2px,rgba(0,255,65,0.03) 2px,rgba(0,255,65,0.03) 4px);
+      pointer-events:none;
+    }
+  </style>
+
+  <script>
+  /* 
+     LOGIN — 4 WILD FEATURES
+   */
+
+  /* ── #1: BIOMETRIC SCAN  */
+  /* Intercept submit button to show scan first */
+  const loginBtn = document.getElementById('loginBtn');
+  const bioPanel = document.getElementById('bioScan');
+  const bioLabel = document.getElementById('bioLabel');
+  const bioProgress = document.getElementById('bioProgress');
+  const bioPct = document.getElementById('bioPct');
+  const bioResult = document.getElementById('bioResult');
+  const bioFrame = document.getElementById('bioFrame');
+
+  if (loginBtn) {
+    loginBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const email = document.getElementById('loginEmail')?.value;
+      const pass  = document.getElementById('loginPassword')?.value;
+      if (!email || !pass) {
+        document.getElementById('loginForm')?.reportValidity();
+        return;
+      }
+      runBioScan(email, pass);
+    }, true);
+  }
+
+  function runBioScan(email, pass) {
+    bioPanel.style.display = 'flex';
+    bioResult.style.display = 'none';
+    bioLabel.textContent = 'SCANNING';
+    bioLabel.style.color = '#f3701e';
+    bioFrame.style.borderColor = '#f3701e';
+    bioFrame.style.boxShadow = '0 0 60px rgba(243,112,30,0.3)';
+    bioProgress.style.background = '#f3701e';
+    bioProgress.style.width = '0';
+    bioPct.textContent = '0%';
+
+    let pct = 0;
+    const interval = setInterval(() => {
+      pct = Math.min(pct + Math.random() * 8 + 2, 100);
+      bioProgress.style.width = pct + '%';
+      bioPct.textContent = Math.round(pct) + '%';
+      if (pct >= 100) {
+        clearInterval(interval);
+        bioCompleted(email, pass);
+      }
+    }, 60);
+  }
+
+  function bioCompleted(email, pass) {
+    /* Simulate auth check — valid if email contains @ and pass length >= 6 */
+    const valid = email.includes('@') && pass.length >= 6;
+    bioResult.style.display = 'block';
+
+    if (valid) {
+      bioLabel.textContent = 'VERIFIED';
+      bioLabel.style.color = '#4ade80';
+      bioFrame.style.borderColor = '#4ade80';
+      bioFrame.style.boxShadow = '0 0 60px rgba(74,222,128,0.4)';
+      bioProgress.style.background = '#4ade80';
+      bioResult.innerHTML = '<span style="color:#4ade80">✓ AKSES DIBERIKAN</span>';
+      document.getElementById('bioLaser').style.animationPlayState = 'paused';
+      document.getElementById('bioLaser').style.background = 'linear-gradient(90deg,transparent,#4ade80,transparent)';
+      setTimeout(() => {
+        bioPanel.style.display = 'none';
+        // Actually submit
+        handleLogin({ preventDefault: () => {} });
+      }, 1200);
+    } else {
+      bioLabel.textContent = 'REJECTED';
+      bioLabel.style.color = '#ff3b4e';
+      bioFrame.style.borderColor = '#ff3b4e';
+      bioFrame.style.boxShadow = '0 0 60px rgba(255,59,78,0.5)';
+      bioProgress.style.background = '#ff3b4e';
+      bioResult.innerHTML = '<span style="color:#ff3b4e" class="glitch-text">✗ AKSES DITOLAK</span>';
+      let blinks = 0;
+      const bl = setInterval(() => {
+        bioFrame.style.opacity = blinks % 2 === 0 ? '0.4' : '1';
+        if (++blinks > 5) { clearInterval(bl); bioFrame.style.opacity = '1'; }
+      }, 120);
+      setTimeout(() => bioPanel.style.display = 'none', 2200);
+    }
+  }
+
+  /* ── #2: PLANET REACTS TO PASSWORD ── */
+  const pwdInput = document.getElementById('loginPassword');
+  const bgLayer  = document.querySelector('.bg-layer');
+  if (pwdInput && bgLayer) {
+    bgLayer.classList.add('pwd-dead');
+    pwdInput.addEventListener('input', () => {
+      const len = pwdInput.value.length;
+      bgLayer.classList.remove('pwd-dead','pwd-fire','pwd-caution','pwd-healthy');
+      if      (len === 0)  bgLayer.classList.add('pwd-dead');
+      else if (len <= 3)   bgLayer.classList.add('pwd-fire');
+      else if (len <= 7)   bgLayer.classList.add('pwd-caution');
+      else                 bgLayer.classList.add('pwd-healthy');
+    });
+    pwdInput.addEventListener('blur', () => {
+      if (!pwdInput.value) bgLayer.classList.add('pwd-dead');
+    });
+  }
+
+  /* ── #3: KONAMI CODE EASTER EGG  */
+  const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let konamiIdx = 0;
+  let termActive = false;
+  const termOverlay = document.getElementById('terminalOverlay');
+  const termOut = document.getElementById('termOut');
+
+  const termLines = [
+    '> Initializing Ripple Core v4.2.0...',
+    '> Loading environmental database [OK]',
+    '> Connecting to Earth satellites [OK]',
+    '> Decrypting habit patterns... ██████ 100%',
+    '> 12,847 active agents detected',
+    '> Butterfly effect engine: ONLINE',
+    '> Carbon offset tracker: ONLINE',
+    '> YOU HAVE UNLOCKED DEVELOPER MODE',
+    '',
+    '  ██████╗ ██╗██████╗ ██████╗ ██╗     ███████╗',
+    '  ██╔══██╗██║██╔══██╗██╔══██╗██║     ██╔════╝',
+    '  ██████╔╝██║██████╔╝██████╔╝██║     █████╗  ',
+    '  ██╔══██╗██║██╔═══╝ ██╔═══╝ ██║     ██╔══╝  ',
+    '  ██║  ██║██║██║     ██║     ███████╗███████╗',
+    '',
+    '> Press ESC or repeat code to exit terminal mode',
+    '> Awaiting command..._',
+  ];
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === KONAMI[konamiIdx]) {
+      konamiIdx++;
+      if (konamiIdx === KONAMI.length) {
+        konamiIdx = 0;
+        termActive = !termActive;
+        if (termActive) activateTerm();
+        else deactivateTerm();
+      }
+    } else {
+      konamiIdx = 0;
+    }
+    if (e.key === 'Escape' && termActive) { termActive = false; deactivateTerm(); }
+  });
+
+  function activateTerm() {
+    termOverlay.style.display = 'block';
+    termOut.textContent = '';
+    let i = 0;
+    const t = setInterval(() => {
+      if (i < termLines.length) {
+        termOut.textContent += termLines[i] + '\n';
+        termOverlay.scrollTop = termOverlay.scrollHeight;
+        i++;
+      } else clearInterval(t);
+    }, 90);
+  }
+  function deactivateTerm() {
+    termOverlay.style.display = 'none';
+  }
+
+  /* ── #4: SHAKE + GLITCH ON FAIL  */
+  /* Hook into form submit to detect failures */
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit-failed', shakeFail);
+  }
+  /* Override handleLogin to dispatch event on failure */
+  const _origHandleLogin = window.handleLogin;
+  window.handleLogin = function(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const email = document.getElementById('loginEmail')?.value;
+    const pass  = document.getElementById('loginPassword')?.value;
+    /* Simulate: fail if no @ in email or pass shorter than 6 */
+    const success = email && email.includes('@') && pass && pass.length >= 6;
+    if (!success) {
+      shakeFail();
+    } else {
+      /* Call original if it exists, else redirect */
+      if (typeof _origHandleLogin === 'function') {
+        _origHandleLogin(e);
+      } else {
+        alert('Login sukses! (simulasi)');
+      }
+    }
+  };
+
+  function shakeFail() {
+    const card = document.querySelector('.auth-card');
+    const title = document.querySelector('.auth-title');
+    if (!card) return;
+
+    card.classList.remove('card-shake','card-flash');
+    title?.classList.remove('glitch-text');
+
+    void card.offsetWidth; /* reflow to restart animation */
+    card.classList.add('card-shake','card-flash');
+    title?.classList.add('glitch-text');
+
+    /* particle burst from card center */
+    fireParticles(card);
+
+    setTimeout(() => {
+      card.classList.remove('card-shake','card-flash');
+      title?.classList.remove('glitch-text');
+    }, 600);
+  }
+
+  function fireParticles(el) {
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    for (let i = 0; i < 16; i++) {
+      const p = document.createElement('div');
+      const angle = (i / 16) * Math.PI * 2;
+      const dist  = 60 + Math.random() * 80;
+      const tx    = Math.cos(angle) * dist;
+      const ty    = Math.sin(angle) * dist;
+      Object.assign(p.style, {
+        position: 'fixed',
+        left: cx + 'px', top: cy + 'px',
+        width: '6px', height: '6px',
+        borderRadius: '50%',
+        background: Math.random() > 0.5 ? '#ff3b4e' : '#00ffff',
+        pointerEvents: 'none',
+        zIndex: '9990',
+        transition: `transform 0.5s ease-out, opacity 0.5s ease-out`,
+        transform: 'translate(-50%,-50%)',
+      });
+      document.body.appendChild(p);
+      requestAnimationFrame(() => {
+        p.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px))`;
+        p.style.opacity = '0';
+      });
+      setTimeout(() => p.remove(), 600);
+    }
+  }
+  </script>
+  <script src="js/wild.js"></script>
+
 </body>
 </html>
+

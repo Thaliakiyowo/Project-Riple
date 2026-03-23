@@ -1,10 +1,3 @@
-// ================================
-// RIPPLE — main.js (AI Edition)
-// ================================
-
-// ================================
-// DATABASE KEBIASAAN (Pre-defined)
-// ================================
 const habitDatabase = {
   jalan: {
     keywords: ['jalan', 'kaki', 'jalankaki', 'berjalan', 'nge-jalan', 'ke sekolah', 'sekolah jalan', 'gowes', 'sepeda', 'bersepeda', 'naik sepeda', 'ontel'],
@@ -151,7 +144,6 @@ const habitDatabase = {
     quote: '"Satu kantong plastik bekas yang kamu buang ke tempat sampah menyelamatkan satu makhluk laut hari ini."'
   },
 
-  // Handler untuk kebiasaan BURUK
   buangSampahSembarangan: {
     keywords: ['buang sembarangan', 'sampah sembarangan', 'nyampah', 'littering'],
     icon: '🚮',
@@ -178,38 +170,31 @@ const habitDatabase = {
   },
 };
 
-// ================================
-// AI KEYWORD ENGINE
-// ================================
-function detectHabit(input) {
-  const lower = input.toLowerCase();
 
-  // Cek setiap habit di database
-  for (const [key, data] of Object.entries(habitDatabase)) {
-    for (const kw of data.keywords) {
-      if (lower.includes(kw)) return { key, data };
+function detectHabit(input) {
+  var lower = input.toLowerCase();
+  for (var _i = 0, _a = Object.entries(habitDatabase); _i < _a.length; _i++) {
+    var key = _a[_i][0], data = _a[_i][1];
+    for (var _j = 0; _j < data.keywords.length; _j++) {
+      if (lower.includes(data.keywords[_j])) return { key: key, data: data };
     }
   }
-
-  // Fallback: generate custom chain dari kata kunci
   return generateCustomHabit(input);
 }
 
 function generateCustomHabit(input) {
-  const lower = input.toLowerCase();
-  let score = 70;
-  let catColor = 'green';
-  let icon = '✨';
-  let category = 'Umum';
+  var lower = input.toLowerCase();
+  var score = 70;
+  var catColor = 'green';
+  var icon = '✨';
+  var category = 'Umum';
 
-  // Detect tone: positif / negatif
-  const negWords = ['tidak', 'ga', 'gak', 'males', 'malas', 'lupa', 'lalai', 'buang', 'buang-buang', 'sampah', 'rokok', 'merokok', 'begadang', 'tidur larut'];
-  const posWords = ['rajin', 'rutin', 'selalu', 'konsisten', 'setiap', 'tiap', 'mulai', 'coba', 'berhasil', 'baik'];
+  var negWords = ['tidak', 'ga', 'gak', 'males', 'malas', 'lupa', 'lalai', 'buang', 'buang-buang', 'sampah', 'rokok', 'merokok', 'begadang', 'tidur larut'];
+  var posWords = ['rajin', 'rutin', 'selalu', 'konsisten', 'setiap', 'tiap', 'mulai', 'coba', 'berhasil', 'baik'];
 
-  const isNeg = negWords.some(w => lower.includes(w));
-  const isPos = posWords.some(w => lower.includes(w));
+  var isNeg = negWords.some(function (w) { return lower.includes(w); });
+  var isPos = posWords.some(function (w) { return lower.includes(w); });
 
-  // Detect kategori dari kata kunci umum
   if (/olah raga|olahraga|gym|lari|renang|badminton|futsal|basket|sport|fitness/.test(lower)) {
     icon = '🏃'; category = 'Kesehatan'; catColor = 'green'; score = 80;
   } else if (/minum air|air putih|tidur cukup|istirahat|sehat|vitamin|makan teratur/.test(lower)) {
@@ -225,32 +210,33 @@ function generateCustomHabit(input) {
   if (isNeg && score > 50) score = Math.max(25, score - 40);
   if (isPos && score < 90) score = Math.min(90, score + 10);
 
-  // Generate chain dinamis berdasarkan deteksi
-  const positiveChain = [
-    { text: `"${input.substring(0, 50)}${input.length > 50 ? '...' : ''}"`, sub: 'Kebiasaan barumu terdeteksi', color: catColor === 'yellow' ? 'yellow' : 'green' },
+  var snippet = input.substring(0, 50) + (input.length > 50 ? '...' : '');
+
+  var positiveChain = [
+    { text: '"' + snippet + '"', sub: 'Kebiasaan barumu terdeteksi', color: catColor === 'yellow' ? 'yellow' : 'green' },
     { text: 'Konsistensi mulai terbentuk', sub: '21 hari = kebiasaan permanen', color: 'green' },
     { text: 'Dampak nyata di sekitarmu', sub: 'Lingkungan & orang-orang merasakannya', color: 'blue' },
     { text: 'Menginspirasi orang sekitar', sub: 'Efek domino sosial dimulai', color: 'blue' },
     { text: 'Bumi 2050 lebih baik karenamu', sub: 'Setiap tindakan kecil dihitung', color: 'green' },
   ];
 
-  const negativeChain = [
-    { text: `"${input.substring(0, 50)}${input.length > 50 ? '...' : ''}"`, sub: 'Kebiasaan ini terdeteksi', color: 'yellow' },
+  var negativeChain = [
+    { text: '"' + snippet + '"', sub: 'Kebiasaan ini terdeteksi', color: 'yellow' },
     { text: 'Dampak negatif mulai terakumulasi', sub: 'Kecil tapi konsisten', color: 'yellow' },
     { text: 'Kualitas hidup perlahan menurun', sub: 'Efek tidak langsung terasa', color: 'yellow' },
     { text: 'Orang sekitar terpengaruh', sub: 'Efek domino sosial', color: 'yellow' },
     { text: 'Masih bisa diubah hari ini!', sub: 'Satu langkah kecil sudah cukup', color: 'blue' },
   ];
 
-  const chain = isNeg ? negativeChain : positiveChain;
+  var chain = isNeg ? negativeChain : positiveChain;
 
   return {
     key: 'custom',
     data: {
-      icon,
-      category,
-      catColor,
-      chain,
+      icon: icon,
+      category: category,
+      catColor: catColor,
+      chain: chain,
       stats: {
         lingkungan: { pct: Math.min(95, score + (isNeg ? -20 : 10)), label: score > 70 ? 'Baik' : 'Perlu Perhatian' },
         pendidikan: { pct: Math.min(95, score + 5), label: score > 70 ? 'Bagus' : 'Sedang' },
@@ -263,10 +249,10 @@ function generateCustomHabit(input) {
         { num: isNeg ? '↓' : '↑', unit: 'indeks', desc: 'Bumi Health Index' },
         { num: '10JT', unit: 'orang', desc: 'Terdampak jika semua melakukan ini' },
       ],
-      score,
+      score: score,
       reply: isNeg
-        ? `😟 Hmm... ${icon} Kebiasaan ini punya efek yang perlu kamu pertimbangkan. Lihat rantai dampaknya:`
-        : `✨ Keren! ${icon} Kebiasaan ini membawa gelombang perubahan yang nyata. Ini rantai dampaknya:`,
+        ? '😟 Hmm... ' + icon + ' Kebiasaan ini punya efek yang perlu kamu pertimbangkan. Lihat rantai dampaknya:'
+        : '✨ Keren! ' + icon + ' Kebiasaan ini membawa gelombang perubahan yang nyata. Ini rantai dampaknya:',
       quote: isNeg
         ? '"Sadar adalah langkah pertama. Mengubah kebiasaan sekarang adalah langkah terbesar."'
         : '"Setiap kebiasaan baik yang konsisten kamu lakukan, menciptakan versi bumi yang lebih baik."'
@@ -274,18 +260,16 @@ function generateCustomHabit(input) {
   };
 }
 
-// ================================
-// IDLE STATE: Live Clock & Feed
-// ================================
+
 function startIdleClock() {
   function tick() {
-    const el = document.getElementById('idleTime');
+    var el = document.getElementById('idleTime');
     if (el) {
-      const now = new Date();
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const s = String(now.getSeconds()).padStart(2, '0');
-      el.textContent = `${h}:${m}:${s}`;
+      var now = new Date();
+      el.textContent =
+        String(now.getHours()).padStart(2, '0') + ':' +
+        String(now.getMinutes()).padStart(2, '0') + ':' +
+        String(now.getSeconds()).padStart(2, '0');
     }
   }
   tick();
@@ -293,10 +277,10 @@ function startIdleClock() {
 }
 
 function setupIdleFeed() {
-  const feed = document.getElementById('idleFeed');
+  var feed = document.getElementById('idleFeed');
   if (!feed) return;
 
-  const events = [
+  var events = [
     { icon: '🌱', text: '3 pohon baru ditanam di Kalimantan', time: 'baru saja' },
     { icon: '♻️', text: '127 kg plastik berhasil didaur ulang', time: '2 menit lalu' },
     { icon: '🚶', text: '1.240 pelajar memilih jalan kaki hari ini', time: '5 menit lalu' },
@@ -305,48 +289,37 @@ function setupIdleFeed() {
     { icon: '📚', text: '890 siswa menyelesaikan sesi belajar ekstra', time: '15 menit lalu' },
   ];
 
-  events.forEach((ev, i) => {
-    const div = document.createElement('div');
+  events.forEach(function (ev, i) {
+    var div = document.createElement('div');
     div.className = 'idle-feed-item';
-    div.style.cssText = `
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 6px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      opacity: 0;
-      animation: fadeUp 0.4s ease forwards;
-      animation-delay: ${i * 0.12}s;
-      font-size: 11.5px;
-      color: #888;
-      line-height: 1.5;
-    `;
-    div.innerHTML = `
-      <span style="flex-shrink:0;font-size:14px">${ev.icon}</span>
-      <span style="flex:1">${ev.text}</span>
-      <span style="color:#555;font-size:10px;white-space:nowrap">${ev.time}</span>
-    `;
+    div.style.cssText =
+      'display:flex;align-items:flex-start;gap:8px;padding:6px 0;' +
+      'border-bottom:1px solid rgba(255,255,255,0.05);opacity:0;' +
+      'animation:fadeUp 0.4s ease forwards;animation-delay:' + (i * 0.12) + 's;' +
+      'font-size:11.5px;color:#888;line-height:1.5;';
+    div.innerHTML =
+      '<span style="flex-shrink:0;font-size:14px">' + ev.icon + '</span>' +
+      '<span style="flex:1">' + ev.text + '</span>' +
+      '<span style="color:#555;font-size:10px;white-space:nowrap">' + ev.time + '</span>';
     feed.appendChild(div);
   });
 }
 
-// ================================
-// AI CHAT ENGINE
-// ================================
-let isAiThinking = false;
 
-function addBubble(text, type) { // type: 'user' | 'system' | 'thinking'
-  const history = document.getElementById('aiChatHistory');
+var isAiThinking = false;
+
+function addBubble(text, type) {
+  var history = document.getElementById('aiChatHistory');
   if (!history) return null;
 
-  const div = document.createElement('div');
-  div.className = `ai-bubble ${type}-bubble`;
+  var div = document.createElement('div');
+  div.className = 'ai-bubble ' + type + '-bubble';
 
   if (type === 'thinking') {
     div.className = 'ai-bubble thinking-bubble';
-    div.innerHTML = `<div class="thinking-dots"><span></span><span></span><span></span></div>`;
+    div.innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
   } else {
-    div.innerHTML = `<p>${text}</p>`;
+    div.innerHTML = '<p>' + text + '</p>';
   }
 
   history.appendChild(div);
@@ -355,12 +328,12 @@ function addBubble(text, type) { // type: 'user' | 'system' | 'thinking'
 }
 
 function setAiStatus(text) {
-  const el = document.getElementById('aiStatus');
+  var el = document.getElementById('aiStatus');
   if (el) el.textContent = text;
 }
 
 function sendChip(text) {
-  const input = document.getElementById('aiInput');
+  var input = document.getElementById('aiInput');
   if (input) input.value = text;
   handleAiSend();
 }
@@ -368,69 +341,56 @@ function sendChip(text) {
 function handleAiSend() {
   if (isAiThinking) return;
 
-  const input = document.getElementById('aiInput');
-  const sendBtn = document.getElementById('aiSendBtn');
-  const chips = document.getElementById('aiChips');
-  const idle = document.getElementById('aiIdleState');
-  const text = input ? input.value.trim() : '';
+  var input = document.getElementById('aiInput');
+  var sendBtn = document.getElementById('aiSendBtn');
+  var chips = document.getElementById('aiChips');
+  var idle = document.getElementById('aiIdleState');
+  var text = input ? input.value.trim() : '';
   if (!text) return;
 
   isAiThinking = true;
   if (sendBtn) sendBtn.disabled = true;
   if (chips) chips.style.display = 'none';
 
-  // Sembunyikan idle state saat pertama kali mengirim
   if (idle) {
     idle.style.transition = 'opacity 0.35s ease';
     idle.style.opacity = '0';
-    setTimeout(() => { idle.style.display = 'none'; }, 360);
+    setTimeout(function () { idle.style.display = 'none'; }, 360);
   }
 
-  // 1. Tambah bubble user
   addBubble(text, 'user');
   if (input) input.value = '';
-
-  // 2. Ubah status AI
   setAiStatus('Menganalisis kebiasaanmu...');
 
-  // 3. Tampilkan thinking dots
-  const thinkBubble = addBubble('', 'thinking');
+  var thinkBubble = addBubble('', 'thinking');
+  var delay = 1500 + Math.random() * 1000;
 
-  // 4. Simulasi "AI processing" delay 1.5-2.5 detik
-  const delay = 1500 + Math.random() * 1000;
-  setTimeout(() => {
-    // Remove thinking bubble
+  setTimeout(function () {
     if (thinkBubble) thinkBubble.remove();
 
-    // Detect habit
-    const result = detectHabit(text);
-    const { data } = result;
+    var result = detectHabit(text);
+    var data = result.data;
 
-    // 5. Tampilkan reply dari "AI"
     addBubble(data.reply, 'system');
-
     setAiStatus('Menampilkan butterfly effect...');
 
-    // 6. Render chain
-    setTimeout(() => {
+    setTimeout(function () {
       renderAiChain(data);
       isAiThinking = false;
       if (sendBtn) sendBtn.disabled = false;
       setAiStatus('Siap menganalisis kebiasaan lain');
     }, 600);
-
   }, delay);
 }
 
-// Auto-resize textarea
 function setupTextarea() {
-  const ta = document.getElementById('aiInput');
+  var ta = document.getElementById('aiInput');
   if (!ta) return;
-  ta.addEventListener('input', () => {
+  ta.addEventListener('input', function () {
     ta.style.height = 'auto';
     ta.style.height = Math.min(ta.scrollHeight, 90) + 'px';
   });
-  ta.addEventListener('keydown', e => {
+  ta.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleAiSend();
@@ -438,54 +398,49 @@ function setupTextarea() {
   });
 }
 
-// ================================
-// FUNGSI: Render Chain dari AI
-// ================================
+
 function renderAiChain(data) {
-  const resultBox = document.getElementById('aiResult');
-  const labelEl = document.getElementById('aiResultLabel');
-  const chainEl = document.getElementById('chainList');
-  const finalLottie = document.getElementById('chainFinalLottie');
-  const impactBox = document.getElementById('impactSummary');
+  var resultBox = document.getElementById('aiResult');
+  var labelEl = document.getElementById('aiResultLabel');
+  var chainEl = document.getElementById('chainList');
+  var finalLottie = document.getElementById('chainFinalLottie');
+  var impactBox = document.getElementById('impactSummary');
 
   if (!resultBox || !chainEl) return;
 
-  // Reset
   resultBox.style.display = 'flex';
   chainEl.innerHTML = '';
   if (finalLottie) { finalLottie.style.display = 'none'; finalLottie.style.opacity = '0'; }
   if (impactBox) impactBox.style.display = 'none';
 
-  // Label hasil
-  if (labelEl) labelEl.innerHTML = `${data.icon} BUTTERFLY EFFECT · <span style="color:var(--green)">${data.category.toUpperCase()}</span>`;
+  if (labelEl) {
+    labelEl.innerHTML = data.icon + ' BUTTERFLY EFFECT · <span style="color:var(--green)">' + data.category.toUpperCase() + '</span>';
+  }
 
-  // Build chain items
-  data.chain.forEach((item, i) => {
-    const el = document.createElement('div');
+  data.chain.forEach(function (item, i) {
+    var el = document.createElement('div');
     el.className = 'chain-item';
-    el.style.animationDelay = `${i * 0.4}s`;
-    const isLast = i === data.chain.length - 1;
-    el.innerHTML = `
-      <div class="chain-left">
-        <div class="chain-dot ${item.color}"></div>
-        ${!isLast ? '<div class="chain-line"></div>' : ''}
-      </div>
-      <div class="chain-text">
-        ${item.text}
-        <small>${item.sub}</small>
-      </div>`;
+    el.style.animationDelay = (i * 0.4) + 's';
+    var isLast = i === data.chain.length - 1;
+    el.innerHTML =
+      '<div class="chain-left">' +
+        '<div class="chain-dot ' + item.color + '"></div>' +
+        (!isLast ? '<div class="chain-line"></div>' : '') +
+      '</div>' +
+      '<div class="chain-text">' +
+        item.text +
+        '<small>' + item.sub + '</small>' +
+      '</div>';
     chainEl.appendChild(el);
   });
 
-  // Update bumi
   updateEarthScore(data.score);
   updateStatBars(data.stats);
   updateProyeksi(data.score);
   updateQuoteText(data.quote);
 
-  // Final lottie + impact setelah chain selesai
-  const totalDelay = (data.chain.length * 400) + 400;
-  setTimeout(() => {
+  var totalDelay = (data.chain.length * 400) + 400;
+  setTimeout(function () {
     if (finalLottie) {
       finalLottie.style.display = 'flex';
       finalLottie.style.animation = 'none';
@@ -496,17 +451,16 @@ function renderAiChain(data) {
   }, totalDelay);
 }
 
-// ================================
-// FUNGSI: Animated Counter
-// ================================
-let currentScore = 0;
 
-function animateCounter(el, from, to, duration = 1200) {
-  const startTime = performance.now();
+var currentScore = 0;
+
+function animateCounter(el, from, to, duration) {
+  duration = duration || 1200;
+  var startTime = performance.now();
   function step(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3);
+    var elapsed = currentTime - startTime;
+    var progress = Math.min(elapsed / duration, 1);
+    var ease = 1 - Math.pow(1 - progress, 3);
     el.textContent = Math.round(from + (to - from) * ease) + '%';
     if (progress < 1) requestAnimationFrame(step);
   }
@@ -514,9 +468,9 @@ function animateCounter(el, from, to, duration = 1200) {
 }
 
 function updateEarthScore(score) {
-  const el = document.getElementById('earthScore');
+  var el = document.getElementById('earthScore');
   if (!el) return;
-  const prev = currentScore;
+  var prev = currentScore;
   currentScore = score;
   animateCounter(el, prev, score, 1200);
 
@@ -533,30 +487,32 @@ function updateEarthScore(score) {
 }
 
 function updateStatBars(stats) {
-  const keys = ['lingkungan', 'pendidikan', 'ekonomi', 'sosial'];
-  keys.forEach(key => {
-    const barEl = document.getElementById('bar-' + key);
-    const valEl = document.getElementById('val-' + key);
-    if (barEl) { barEl.style.width = '0%'; setTimeout(() => { barEl.style.width = stats[key].pct + '%'; }, 80); }
+  ['lingkungan', 'pendidikan', 'ekonomi', 'sosial'].forEach(function (key) {
+    var barEl = document.getElementById('bar-' + key);
+    var valEl = document.getElementById('val-' + key);
+    if (barEl) {
+      barEl.style.width = '0%';
+      setTimeout(function () { barEl.style.width = stats[key].pct + '%'; }, 80);
+    }
     if (valEl) valEl.textContent = stats[key].label + ' (' + stats[key].pct + '%)';
   });
 }
 
 function updateProyeksi(score) {
-  const danger = document.getElementById('proj-danger');
-  const medium = document.getElementById('proj-medium');
-  const best = document.getElementById('proj-best');
-  [danger, medium, best].forEach(el => el && el.classList.remove('active-proj'));
-  if (score >= 80) best && best.classList.add('active-proj');
-  else if (score >= 60) medium && medium.classList.add('active-proj');
-  else danger && danger.classList.add('active-proj');
+  var danger = document.getElementById('proj-danger');
+  var medium = document.getElementById('proj-medium');
+  var best = document.getElementById('proj-best');
+  [danger, medium, best].forEach(function (el) { if (el) el.classList.remove('active-proj'); });
+  if (score >= 80 && best) best.classList.add('active-proj');
+  else if (score >= 60 && medium) medium.classList.add('active-proj');
+  else if (danger) danger.classList.add('active-proj');
 }
 
 function updateQuoteText(quote) {
-  const el = document.getElementById('quoteText');
+  var el = document.getElementById('quoteText');
   if (!el) return;
   el.style.opacity = '0';
-  setTimeout(() => {
+  setTimeout(function () {
     el.textContent = quote;
     el.style.transition = 'opacity 0.5s ease';
     el.style.opacity = '1';
@@ -564,32 +520,30 @@ function updateQuoteText(quote) {
 }
 
 function showImpactSummary(impactData) {
-  const box = document.getElementById('impactSummary');
-  const grid = document.getElementById('impactGrid');
+  var box = document.getElementById('impactSummary');
+  var grid = document.getElementById('impactGrid');
   if (!box || !grid) return;
 
   grid.innerHTML = '';
-  impactData.forEach(item => {
-    const div = document.createElement('div');
+  impactData.forEach(function (item) {
+    var div = document.createElement('div');
     div.className = 'impact-item';
-    div.innerHTML = `
-      <span class="impact-num">${item.num}</span>
-      <span class="impact-desc">${item.unit}<br>${item.desc}</span>`;
+    div.innerHTML =
+      '<span class="impact-num">' + item.num + '</span>' +
+      '<span class="impact-desc">' + item.unit + '<br>' + item.desc + '</span>';
     grid.appendChild(div);
   });
 
   box.style.display = 'block';
   box.style.opacity = '0';
-  requestAnimationFrame(() => {
+  requestAnimationFrame(function () {
     box.style.transition = 'opacity 0.5s ease';
     box.style.opacity = '1';
   });
 }
 
-// ================================
-// FAKTA BUMI
-// ================================
-const faktaList = [
+
+var faktaList = [
   'Setiap menit, 36 lapangan sepak bola hutan tropis ditebang di seluruh dunia.',
   'Suhu rata-rata bumi telah naik 1.2°C sejak era pra-industri — dan terus meningkat.',
   'Indonesia adalah rumah bagi 17% spesies burung dunia, namun 1.500 di antaranya terancam punah.',
@@ -598,45 +552,47 @@ const faktaList = [
   'Generasi Z yang belajar hari ini akan memegang kendali bumi di tahun 2050.',
 ];
 
-let faktaCurrentIndex = 0;
-let faktaInterval = null;
+var faktaCurrentIndex = 0;
+var faktaInterval = null;
 
 function showFakta(index) {
-  const textEl = document.getElementById('faktaText');
-  const indexEl = document.getElementById('faktaIndex');
-  const dots = document.querySelectorAll('.fdot');
+  var textEl = document.getElementById('faktaText');
+  var indexEl = document.getElementById('faktaIndex');
+  var dots = document.querySelectorAll('.fdot');
   if (!textEl) return;
   textEl.style.opacity = '0';
-  setTimeout(() => {
+  setTimeout(function () {
     textEl.textContent = faktaList[index];
     if (indexEl) indexEl.textContent = index + 1;
     textEl.style.opacity = '1';
   }, 350);
-  dots.forEach((d, i) => d.classList.toggle('active', i === index));
+  dots.forEach(function (d, i) { d.classList.toggle('active', i === index); });
   faktaCurrentIndex = index;
 }
 
 function setupFaktaBumi() {
-  document.querySelectorAll('.fdot').forEach((dot, i) => {
-    dot.addEventListener('click', () => {
+  document.querySelectorAll('.fdot').forEach(function (dot, i) {
+    dot.addEventListener('click', function () {
       clearInterval(faktaInterval);
       showFakta(i);
-      faktaInterval = setInterval(() => showFakta((faktaCurrentIndex + 1) % faktaList.length), 4000);
+      faktaInterval = setInterval(function () {
+        showFakta((faktaCurrentIndex + 1) % faktaList.length);
+      }, 4000);
     });
   });
-  faktaInterval = setInterval(() => showFakta((faktaCurrentIndex + 1) % faktaList.length), 4000);
+  faktaInterval = setInterval(function () {
+    showFakta((faktaCurrentIndex + 1) % faktaList.length);
+  }, 4000);
 }
 
-// ================================
-// DAMPAK KOLEKTIF
-// ================================
+
 function animateDampakKolektif() {
-  const duration = 2200;
-  const start = performance.now();
+  var duration = 2200;
+  var start = performance.now();
   function step(now) {
-    const p = Math.min((now - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - p, 3);
-    const el = id => document.getElementById(id);
+    var p = Math.min((now - start) / duration, 1);
+    var ease = 1 - Math.pow(1 - p, 3);
+    var el = function (id) { return document.getElementById(id); };
     if (el('dkPohon')) el('dkPohon').textContent = Math.round(128470 * ease).toLocaleString('id-ID');
     if (el('dkKm')) el('dkKm').textContent = Math.round(3650000 * ease).toLocaleString('id-ID');
     if (el('dkJam')) el('dkJam').textContent = Math.round(20000000 * ease).toLocaleString('id-ID');
@@ -646,43 +602,37 @@ function animateDampakKolektif() {
   requestAnimationFrame(step);
 }
 
-// ================================
-// FLOATING PARTICLES
-// ================================
+
 function generateParticles() {
-  const container = document.getElementById('particlesBg');
+  var container = document.getElementById('particlesBg');
   if (!container) return;
-  const colors = ['rgba(184,255,0,', 'rgba(0,229,255,', 'rgba(255,225,0,'];
-  for (let i = 0; i < 40; i++) {
-    const p = document.createElement('div');
+  var colors = ['rgba(184,255,0,', 'rgba(0,229,255,', 'rgba(255,225,0,'];
+  for (var i = 0; i < 40; i++) {
+    var p = document.createElement('div');
     p.className = 'particle';
-    const size = Math.random() * 4 + 1.5;
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    const op = (Math.random() * 0.3 + 0.07).toFixed(2);
-    p.style.cssText = `
-      width:${size}px; height:${size}px;
-      left:${Math.random() * 100}%; bottom:-10px;
-      background:${color}${op});
-      box-shadow:0 0 ${size * 2}px ${color}0.4);
-      animation-duration:${Math.random() * 20 + 15}s;
-      animation-delay:${Math.random() * -30}s;
-    `;
+    var size = Math.random() * 4 + 1.5;
+    var color = colors[Math.floor(Math.random() * colors.length)];
+    var op = (Math.random() * 0.3 + 0.07).toFixed(2);
+    p.style.cssText =
+      'width:' + size + 'px;height:' + size + 'px;' +
+      'left:' + (Math.random() * 100) + '%;bottom:-10px;' +
+      'background:' + color + op + ');' +
+      'box-shadow:0 0 ' + (size * 2) + 'px ' + color + '0.4);' +
+      'animation-duration:' + (Math.random() * 20 + 15) + 's;' +
+      'animation-delay:' + (Math.random() * -30) + 's;';
     container.appendChild(p);
   }
 }
 
-// ================================
-// SCROLL REVEAL (IntersectionObserver)
-// ================================
+
 function setupScrollReveal() {
-  const targets = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+  var targets = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
   if (!targets.length) return;
 
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry, i) {
       if (entry.isIntersecting) {
-        // Stagger delay berdasarkan urutan elemen terlihat
-        setTimeout(() => {
+        setTimeout(function () {
           entry.target.classList.add('visible');
         }, i * 120);
         obs.unobserve(entry.target);
@@ -690,22 +640,20 @@ function setupScrollReveal() {
     });
   }, { threshold: 0.12 });
 
-  targets.forEach(el => obs.observe(el));
+  targets.forEach(function (el) { obs.observe(el); });
 }
 
-// ================================
-// TYPED TEXT EFFECT — Hero subtitle
-// ================================
+
 function setupTypedText() {
-  const el = document.querySelector('.hero-sub');
+  var el = document.querySelector('.hero-sub');
   if (!el) return;
-  const fullText = el.textContent.trim();
+  var fullText = el.textContent.trim();
   el.textContent = '';
   el.style.opacity = '1';
   el.style.borderRight = '2px solid rgba(243,112,30,0.7)';
 
-  let i = 0;
-  const speed = 28; // ms per karakter
+  var i = 0;
+  var speed = 28;
 
   function type() {
     if (i < fullText.length) {
@@ -713,18 +661,40 @@ function setupTypedText() {
       i++;
       setTimeout(type, speed);
     } else {
-      // Hapus cursor setelah selesai
-      setTimeout(() => { el.style.borderRight = 'none'; }, 800);
+      setTimeout(function () { el.style.borderRight = 'none'; }, 800);
     }
   }
-  // Mulai setelah hero entrance animation selesai
   setTimeout(type, 900);
 }
 
-// ================================
-// INIT
-// ================================
-document.addEventListener('DOMContentLoaded', () => {
+function setupNavbarToggle() {
+  var navbar = document.querySelector('.navbar');
+  if (!navbar) return;
+
+  // Create toggle button
+  var toggleBtn = document.createElement('div');
+  toggleBtn.className = 'nav-toggle-btn';
+  toggleBtn.innerHTML = '<span></span><span></span><span></span>';
+  document.body.appendChild(toggleBtn);
+
+  // Toggle open
+  toggleBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.body.classList.remove('nav-closed');
+  });
+
+  // Close when clicking main content
+  var closeAreas = document.querySelectorAll('main, section, .ticker-bar, .particles-bg, #particlesBg, .main-grid, .hero');
+  closeAreas.forEach(function(area) {
+    area.addEventListener('click', function() {
+      if (!document.body.classList.contains('nav-closed')) {
+        document.body.classList.add('nav-closed');
+      }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
   generateParticles();
   setupFaktaBumi();
   animateDampakKolektif();
@@ -733,6 +703,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setupIdleFeed();
   setupScrollReveal();
   setupTypedText();
-  // Set initial earth score ke 0 saat halaman baru load
+  setupNavbarToggle();
   updateEarthScore(0);
 });

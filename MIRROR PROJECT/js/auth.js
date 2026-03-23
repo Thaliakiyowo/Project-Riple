@@ -1,11 +1,11 @@
-/* ================================================
+﻿/* 
    auth.js  —  RIPPLE Auth Pages Shared Logic
    Used by: login.html, register.html
-   ================================================ */
+    */
 
-/* ─────────────────────────────────────────────────
+/* 
    PARTICLES
-   ───────────────────────────────────────────────── */
+    */
 function initParticles() {
   const bg = document.getElementById('particlesBg');
   if (!bg) return;
@@ -36,10 +36,10 @@ function initParticles() {
   }
 }
 
-/* ─────────────────────────────────────────────────
+/* 
    TOGGLE PASSWORD VISIBILITY
    Call: togglePwd('inputId', buttonElement)
-   ───────────────────────────────────────────────── */
+    */
 function togglePwd(inputId, btn) {
   const input = document.getElementById(inputId);
   if (!input) return;
@@ -58,9 +58,9 @@ function togglePwd(inputId, btn) {
        <circle cx="12" cy="12" r="3"></circle>`;
 }
 
-/* ─────────────────────────────────────────────────
+/* 
    PASSWORD STRENGTH METER  (register only)
-   ───────────────────────────────────────────────── */
+    */
 function checkStrength(val) {
   const segs = [
     document.getElementById('seg1'),
@@ -95,9 +95,9 @@ function checkStrength(val) {
   }
 }
 
-/* ─────────────────────────────────────────────────
+/* 
    EMAIL VALIDATION  (register only)
-   ───────────────────────────────────────────────── */
+    */
 function validateEmail(input) {
   const hint = document.getElementById('emailHint');
   if (!hint) return;
@@ -118,9 +118,9 @@ function validateEmail(input) {
   }
 }
 
-/* ─────────────────────────────────────────────────
+/* 
    PASSWORD MATCH CHECK  (register only)
-   ───────────────────────────────────────────────── */
+    */
 function checkMatch() {
   const pass = document.getElementById('regPassword');
   const conf = document.getElementById('confirmPassword');
@@ -141,9 +141,9 @@ function checkMatch() {
   }
 }
 
-/* ─────────────────────────────────────────────────
+/* 
    LOGIN FORM HANDLER
-   ───────────────────────────────────────────────── */
+    */
 function handleLogin(e) {
   e.preventDefault();
 
@@ -171,9 +171,9 @@ function handleLogin(e) {
   }, 1800);
 }
 
-/* ─────────────────────────────────────────────────
+/* 
    REGISTER FORM HANDLER
-   ───────────────────────────────────────────────── */
+    */
 function handleRegister(e) {
   e.preventDefault();
 
@@ -219,9 +219,9 @@ function handleRegister(e) {
   }, 1600);
 }
 
-/* ─────────────────────────────────────────────────
+/* 
    SOCIAL LOGIN / REGISTER
-   ───────────────────────────────────────────────── */
+    */
 function socialLogin(provider) {
   alert(`Login dengan ${provider} — Fitur segera hadir! 🚀`);
 }
@@ -230,7 +230,7 @@ function socialRegister(provider) {
   alert(`Daftar dengan ${provider} — Fitur segera hadir! 🚀`);
 }
 
-/* ─────────────────────────────────────────────────
+/* 
    INIT ON DOM READY
-   ───────────────────────────────────────────────── */
+    */
 document.addEventListener('DOMContentLoaded', initParticles);

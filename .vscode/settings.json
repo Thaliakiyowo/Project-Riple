@@ -1,3 +1,19 @@
 {
     "liveServer.settings.port": 5502
+
+    {
+        "vscode-pokemon.defaultPokemon": [
+            {
+                "type": "pikachu",
+                "name": "Sparky"
+            },
+            {
+                "type": "charizard",
+                "name": "Flame"
+            },
+            {
+                "type": "articuno"
+            }
+        ]
+    }
 }

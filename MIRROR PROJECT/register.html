@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -11,6 +11,7 @@
     rel="stylesheet">
   <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
   <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/wild.css">
 </head>
 
 <body>
@@ -55,7 +56,7 @@
   <!-- SPLIT LAYOUT -->
   <div class="page-wrapper">
 
-    <!-- ═══ LEFT: VISUAL PANEL ═══ -->
+    <!--  LEFT: VISUAL PANEL  -->
     <div class="auth-visual">
 
       <div class="auth-visual-logo">RIPPLE</div>
@@ -115,7 +116,7 @@
 
     </div>
 
-    <!-- ═══ RIGHT: FORM PANEL ═══ -->
+    <!--  RIGHT: FORM PANEL  -->
     <div class="auth-form-panel">
       <div class="auth-container">
 
@@ -298,6 +299,388 @@
 
   <script src="js/auth.js"></script>
 
-</body>
+  <!-- 
+       REGISTER — 3 WILD FEATURES
+   -->
+  <style>
+    /* ── MULTI-STEP TRANSFORM  */
+    .form-step {
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s ease;
+      transform-origin: center;
+      transform-style: preserve-3d;
+    }
+    .form-step.hidden-left  { transform: rotateY(-90deg); opacity: 0; pointer-events:none; position:absolute; width:100%; }
+    .form-step.hidden-right { transform: rotateY(90deg);  opacity: 0; pointer-events:none; position:absolute; width:100%; }
+    .form-step.active       { transform: rotateY(0deg);   opacity: 1; position:relative; }
 
+    /* Step progress bar */
+    .step-progress {
+      display: flex; gap: 8px; margin-bottom: 22px; align-items: center;
+    }
+    .step-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      transition: all 0.3s ease;
+    }
+    .step-dot.active { background: #f3701e; box-shadow: 0 0 10px rgba(243,112,30,0.5); width:24px; border-radius:4px; }
+    .step-dot.done   { background: #4ade80; }
+    .step-nav { display:flex; gap:10px; margin-top:16px; }
+    .btn-next, .btn-prev {
+      flex:1; padding:11px; border-radius:10px; border:none; cursor:pointer;
+      font-size:13px; font-weight:700; font-family:'Inter',sans-serif;
+      transition: all 0.2s;
+    }
+    .btn-next { background: linear-gradient(135deg,#f3701e,#e05010); color:#fff; }
+    .btn-next:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(243,112,30,0.4); }
+    .btn-prev { background: rgba(255,255,255,0.06); color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.1); }
+
+    /* ── AVATAR CANVAS  */
+    .avatar-gen-wrap {
+      display: flex; align-items: center; gap:12px; margin-bottom: 14px;
+    }
+    #avatarCanvas {
+      border-radius: 50%; border:2px solid rgba(243,112,30,0.4);
+      flex-shrink:0;
+    }
+    .avatar-gen-label { font-size:11px; color:rgba(255,255,255,0.3); }
+
+    /* ── PLEDGE STEP  */
+    .pledge-box {
+      background: rgba(243,112,30,0.06);
+      border: 1px solid rgba(243,112,30,0.2);
+      border-radius: 14px; padding:18px; margin-bottom:16px;
+      font-size:13px; color:rgba(240,236,232,0.65);
+      line-height:1.7;
+    }
+    .pledge-box strong { color:#fff; }
+    .pledge-counter {
+      font-size:11px; color:rgba(255,255,255,0.3);
+      margin-bottom:10px; letter-spacing:0.5px;
+    }
+
+    /* HOLD TO CONFIRM */
+    #holdBtn {
+      width:100%; padding:14px; border:none; border-radius:12px;
+      cursor:pointer; font-size:14px; font-weight:700;
+      font-family:'Inter',sans-serif; letter-spacing:0.5px;
+      position:relative; overflow:hidden;
+      background:rgba(255,255,255,0.07); color:rgba(255,255,255,0.5);
+      border:1px solid rgba(255,255,255,0.1);
+      transition: color 0.3s, border-color 0.3s;
+      user-select:none;
+    }
+    #holdBtn.ready { color:#fff; border-color:rgba(243,112,30,0.4); }
+    #holdFill {
+      position:absolute; top:0; left:0; height:100%; width:0%;
+      background:linear-gradient(90deg,rgba(243,112,30,0.3),rgba(243,112,30,0.15));
+      transition: width 0.05s linear; pointer-events:none;
+    }
+
+    /* CONFETTI particle */
+    .confetti-piece {
+      position:fixed; width:8px; height:8px;
+      pointer-events:none; z-index:9999;
+      border-radius:2px;
+      animation:confettiFall 1.2s ease-in forwards;
+    }
+    @keyframes confettiFall {
+      0%   { transform:translateY(0) rotateZ(0); opacity:1; }
+      100% { transform:translateY(100vh) rotateZ(720deg); opacity:0; }
+    }
+  </style>
+
+  <script>
+  /* 
+     REGISTER — 3 WILD FEATURES
+   */
+
+  /* ── STEP CONTROLLER  */
+  /* Wrap existing form fields into 3 steps dynamically */
+  (function buildSteps() {
+    const form = document.getElementById('registerForm');
+    if (!form) return;
+
+    /* Collect existing fields */
+    const nameRow    = form.querySelector('.form-row');
+    const emailGroup = form.querySelectorAll('.form-group')[1]; /* email */
+    const pwdGroup   = form.querySelectorAll('.form-group')[2]; /* password */
+    const cfmGroup   = form.querySelectorAll('.form-group')[3]; /* confirm */
+    const terms      = form.querySelector('.checkbox-label');
+    const submitBtn  = form.querySelector('#registerBtn');
+    const socialPart = document.querySelector('.auth-card--register > *:not(.form)');
+
+    /* Clear form */
+    form.innerHTML = '';
+
+    /* Progress dots */
+    const prog = document.createElement('div');
+    prog.className = 'step-progress';
+    prog.innerHTML = '<div class="step-dot active" id="sd0"></div><div class="step-dot" id="sd1"></div><div class="step-dot" id="sd2"></div>';
+    form.appendChild(prog);
+
+    /* ── STEP 1: identitas ── */
+    const step1 = document.createElement('div');
+    step1.className = 'form-step active'; step1.id = 'step1';
+
+    /* Avatar generator */
+    const avWrap = document.createElement('div');
+    avWrap.className = 'avatar-gen-wrap';
+    avWrap.innerHTML = `
+      <canvas id="avatarCanvas" width="52" height="52"></canvas>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:3px">Avatar kamu</div>
+        <div class="avatar-gen-label">Dihasilkan dari namamu secara real-time ✨</div>
+      </div>`;
+    step1.appendChild(avWrap);
+    if (nameRow)    step1.appendChild(nameRow);
+    if (emailGroup) step1.appendChild(emailGroup);
+
+    const nav1 = document.createElement('div');
+    nav1.className = 'step-nav';
+    nav1.innerHTML = `<button type="button" class="btn-next" id="toStep2">Lanjut →</button>`;
+    step1.appendChild(nav1);
+    form.appendChild(step1);
+
+    /* ── STEP 2: security ── */
+    const step2 = document.createElement('div');
+    step2.className = 'form-step hidden-right'; step2.id = 'step2';
+    const s2head = document.createElement('p');
+    s2head.style.cssText = 'font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:16px';
+    s2head.textContent = '🔐 Buat password yang kuat untuk melindungi akunmu.';
+    step2.appendChild(s2head);
+    if (pwdGroup) step2.appendChild(pwdGroup);
+    if (cfmGroup) step2.appendChild(cfmGroup);
+
+    const nav2 = document.createElement('div');
+    nav2.className = 'step-nav';
+    nav2.innerHTML = `<button type="button" class="btn-prev" id="toStep1Back">← Kembali</button>
+                      <button type="button" class="btn-next" id="toStep3">Lanjut →</button>`;
+    step2.appendChild(nav2);
+    form.appendChild(step2);
+
+    /* ── STEP 3: pledge ── */
+    const step3 = document.createElement('div');
+    step3.className = 'form-step hidden-right'; step3.id = 'step3';
+    step3.innerHTML = `
+      <p class="pledge-counter" id="pledgeCounter">🌍 Loading...</p>
+      <div class="pledge-box">
+        <strong>Janji Ripple-ku:</strong><br><br>
+        "Aku, <span id="pledgeName">pejuang bumi</span>, berjanji untuk menjaga kebiasaan hidup yang lebih berkelanjutan —
+        mengurangi emisi, memilah sampah, dan menginspirasi orang di sekitarku untuk melakukan hal yang sama.
+        Setiap kebiasaan kecil yang aku lakukan <em>membentuk masa depan Bumi kita bersama.</em>"
+      </div>
+      <p style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:12px;text-align:center">
+        Tahan tombol di bawah selama 3 detik untuk berkomitmen ✋
+      </p>
+      <button type="button" id="holdBtn">
+        <div id="holdFill"></div>
+        <span id="holdTxt">✋ Tahan untuk Berkomitmen</span>
+      </button>`;
+    if (terms) step3.appendChild(terms);
+
+    const nav3 = document.createElement('div');
+    nav3.className = 'step-nav';
+    nav3.innerHTML = `<button type="button" class="btn-prev" id="toStep2Back">← Kembali</button>`;
+    step3.appendChild(nav3);
+    form.appendChild(step3);
+
+    /* Wire navigation */
+    document.getElementById('toStep2')?.addEventListener('click', () => goStep(1, 2));
+    document.getElementById('toStep1Back')?.addEventListener('click', () => goStep(2, 1));
+    document.getElementById('toStep3')?.addEventListener('click', () => goStep(2, 3));
+    document.getElementById('toStep2Back')?.addEventListener('click', () => goStep(3, 2));
+
+    updatePledgeCounter();
+  })();
+
+  function goStep(from, to) {
+    const fromEl = document.getElementById('step' + from);
+    const toEl   = document.getElementById('step' + to);
+    if (!fromEl || !toEl) return;
+
+    /* Direction */
+    const forward = to > from;
+    fromEl.className = 'form-step ' + (forward ? 'hidden-left' : 'hidden-right');
+    toEl.className   = 'form-step active';
+
+    /* Dots */
+    [0,1,2].forEach(i => {
+      const d = document.getElementById('sd'+i);
+      if (!d) return;
+      d.className = 'step-dot' + (i < to-1 ? ' done' : i === to-1 ? ' active' : '');
+    });
+
+    /* Update pledge name */
+    const fn = document.getElementById('firstName')?.value;
+    const pn = document.getElementById('pledgeName');
+    if (fn && pn) pn.textContent = fn;
+  }
+
+  /* ── #5: LIVE AVATAR GENERATOR  */
+  function generateAvatar(name) {
+    const canvas = document.getElementById('avatarCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const size = 52;
+    ctx.clearRect(0,0,size,size);
+
+    /* Hash name to numbers */
+    let hash = 0;
+    for (let i=0; i<name.length; i++) hash = ((hash<<5)-hash) + name.charCodeAt(i);
+    hash = Math.abs(hash);
+
+    const hue1 = hash % 360;
+    const hue2 = (hash * 7 + 120) % 360;
+    const hue3 = (hash * 13 + 240) % 360;
+
+    /* Background */
+    const bg = ctx.createLinearGradient(0,0,size,size);
+    bg.addColorStop(0, `hsl(${hue1},70%,20%)`);
+    bg.addColorStop(1, `hsl(${hue2},60%,15%)`);
+    ctx.fillStyle = bg;
+    ctx.beginPath();
+    ctx.arc(size/2,size/2,size/2,0,Math.PI*2);
+    ctx.fill();
+
+    /* Shape based on first char */
+    const chars = name.toUpperCase().split('');
+    chars.forEach((c, idx) => {
+      const v  = c.charCodeAt(0);
+      const cx = size/2 + Math.cos(idx*1.3+hash)*12;
+      const cy = size/2 + Math.sin(idx*1.7+hash)*12;
+      const r  = 4 + (v % 8);
+      ctx.fillStyle = `hsla(${hue3+idx*30},80%,65%,0.6)`;
+      ctx.beginPath();
+      if (v % 3 === 0) {
+        ctx.arc(cx,cy,r,0,Math.PI*2);
+      } else if (v % 3 === 1) {
+        ctx.rect(cx-r/2,cy-r/2,r,r);
+      } else {
+        ctx.moveTo(cx,cy-r);
+        ctx.lineTo(cx+r,cy+r);
+        ctx.lineTo(cx-r,cy+r);
+        ctx.closePath();
+      }
+      ctx.fill();
+    });
+
+    /* Initials overlay */
+    const initials = (name.split(' ').map(w=>w[0]).join('').slice(0,2)).toUpperCase();
+    ctx.fillStyle = '#fff';
+    ctx.font = `bold ${initials.length > 1 ? 16 : 20}px Inter,sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = 4;
+    ctx.fillText(initials, size/2, size/2);
+  }
+
+  document.addEventListener('input', e => {
+    if (e.target.id === 'firstName' || e.target.id === 'lastName') {
+      const fn = document.getElementById('firstName')?.value || '';
+      const ln = document.getElementById('lastName')?.value || '';
+      const name = (fn + ' ' + ln).trim() || 'R';
+      generateAvatar(name);
+      const pn = document.getElementById('pledgeName');
+      if (pn && fn) pn.textContent = fn;
+    }
+  });
+  generateAvatar('R');
+
+  /* ── #7: HOLD TO PLEDGE  */
+  let holdInterval = null;
+  let holdProgress = 0;
+  const HOLD_DURATION = 3000; /* ms */
+
+  function setupHold() {
+    const btn = document.getElementById('holdBtn');
+    const fill = document.getElementById('holdFill');
+    const txt  = document.getElementById('holdTxt');
+    if (!btn) return;
+
+    const start = () => {
+      if (holdInterval) return;
+      btn.classList.add('ready');
+      holdInterval = setInterval(() => {
+        holdProgress += 50;
+        const pct = Math.min(holdProgress / HOLD_DURATION * 100, 100);
+        fill.style.width = pct + '%';
+        txt.textContent  = pct < 100 ? `✋ ${Math.ceil((HOLD_DURATION - holdProgress)/1000 + 0.9)}s lagi...` : '✅ Komitmen diterima!';
+        if (holdProgress >= HOLD_DURATION) {
+          clearInterval(holdInterval); holdInterval = null;
+          pledgeSuccess();
+        }
+      }, 50);
+    };
+
+    const stop = () => {
+      if (holdInterval) {
+        clearInterval(holdInterval); holdInterval = null;
+        holdProgress = 0;
+        fill.style.width = '0';
+        txt.textContent = '✋ Tahan untuk Berkomitmen';
+        btn.classList.remove('ready');
+      }
+    };
+
+    btn.addEventListener('mousedown', start);
+    btn.addEventListener('touchstart', start, {passive:true});
+    btn.addEventListener('mouseup',  stop);
+    btn.addEventListener('mouseleave', stop);
+    btn.addEventListener('touchend',  stop);
+  }
+
+  /* Call after DOM builds step3 */
+  setTimeout(setupHold, 300);
+
+  function pledgeSuccess() {
+    const btn = document.getElementById('holdBtn');
+    if (btn) {
+      btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
+      btn.style.color = '#fff';
+      btn.style.borderColor = '#22c55e';
+    }
+    launchConfetti();
+    /* Actually submit after confetti */
+    setTimeout(() => {
+      const checkbox = document.getElementById('agreeTerms');
+      if (checkbox) checkbox.checked = true;
+      handleRegister({ preventDefault: () => {} });
+    }, 1800);
+  }
+
+  function launchConfetti() {
+    const colors = ['#f3701e','#4ade80','#facc15','#60a5fa','#f472b6','#a78bfa'];
+    for (let i = 0; i < 80; i++) {
+      setTimeout(() => {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        p.style.left  = (Math.random() * 100) + 'vw';
+        p.style.top   = '-10px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.animationDuration = (0.8 + Math.random() * 0.8) + 's';
+        p.style.animationDelay    = (Math.random() * 0.4) + 's';
+        p.style.width  = (6 + Math.random()*6) + 'px';
+        p.style.height = (6 + Math.random()*6) + 'px';
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 2000);
+      }, i * 20);
+    }
+  }
+
+  /* ── PLEDGE COUNTER  */
+  function updatePledgeCounter() {
+    const el = document.getElementById('pledgeCounter');
+    if (!el) return;
+    const base  = 47832;
+    const count = base + Math.floor(Math.random() * 200);
+    el.textContent = `🌍 ${count.toLocaleString()} orang sudah berjanji — bergabunglah!`;
+    setInterval(() => {
+      el.textContent = `🌍 ${(base + Math.floor(Math.random()*400)).toLocaleString()} orang sudah berjanji — bergabunglah!`;
+    }, 4000);
+  }
+  </script>
+  <script src="js/wild.js"></script>
+
+</body>
 </html>
