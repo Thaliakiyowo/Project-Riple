@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <script>
+    (function() {
+      if (localStorage.getItem('ripple_theme') === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RIPPLE — Every Choice You Make, The World Feels It</title>
@@ -84,6 +91,9 @@
     <button data-nav="about" class="nav-link-btn">
       <span class="nav-icon">ℹ️</span> <span>Tentang Kami</span>
     </button>
+    <button data-nav="settings" class="nav-link-btn">
+      <span class="nav-icon">⚙️</span> <span>Pengaturan</span>
+    </button>
   </div>
   
   <div class="nav-bottom-cta">
@@ -92,7 +102,7 @@
         <canvas id="nav-globe-canvas" class="nav-globe-mini" width="48" height="48"></canvas>
       </div>
       <p>Simulasi Bumi<br>Sedang Berjalan</p>
-      <button class="btn btn-primary" style="width:100%;font-size:0.75rem;padding:10px 0;border-radius:12px;" data-nav="profile">Lihat Dampakmu</button>
+      <button class="btn btn-primary" style="width:100%;font-size:0.75rem;padding:10px 0;border-radius:12px;justify-content:center;" data-nav="profile">Lihat Dampakmu</button>
     </div>
   </div>
 </nav>
@@ -203,7 +213,7 @@
     </div>
   </div>
 
-  <div class="landing-scroll-hint">
+  <div class="landing-scroll-hint" style="cursor: pointer;" onclick="document.querySelector('[data-nav=\'about\']').click()">
     <span>Scroll untuk explore</span>
     <div class="scroll-arrow"></div>
   </div>
@@ -651,13 +661,19 @@
         <p class="p-meta">Peran: <span style="color:#f97316;">Pelopor Bumi</span></p>
         <p class="p-meta">Misi: <span id="p-mission">Menyelamatkan Lingkungan</span></p>
         <p class="p-meta" style="margin-top:8px;">Email: <span id="p-email">pelajar@ripple.com</span></p>
-        <div class="p-socials">
-          <div class="p-social-icon">IG</div>
-          <div class="p-social-icon">X</div>
-          <div class="p-social-icon">IN</div>
+        <div class="p-socials" id="p-socials">
+          <a href="#" target="_blank" class="p-social-icon" id="p-soc-ig" style="opacity:0.5; pointer-events:none;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <a href="#" target="_blank" class="p-social-icon" id="p-soc-x" style="opacity:0.5; pointer-events:none;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.008 4.076H5.078z"/></svg>
+          </a>
+          <a href="#" target="_blank" class="p-social-icon" id="p-soc-fb" style="opacity:0.5; pointer-events:none;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
         </div>
       </div>
-      <button class="p-edit-btn">✎</button>
+      <button class="p-edit-btn" onclick="window.editProfile(this)">✎</button>
     </div>
 
     <!-- Top Right: Stats Card -->
@@ -744,6 +760,42 @@
         </div>
         <div class="p-stat-bar-container" style="margin-top:8px; height:8px;"><div class="p-stat-bar" style="width:45%; background:#a78bfa;"></div></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION — SETTINGS
+══════════════════════════════════════════════════════════ -->
+<section data-section="settings" id="section-settings">
+  <div class="container section" style="max-width: 800px;">
+    <div class="profile-header">
+      <h2 class="profile-title">Pengaturan</h2>
+    </div>
+
+    <div class="settings-grid" style="display: flex; flex-direction: column; gap: 24px;">
+      
+      <!-- Theme Setting Card -->
+      <div class="card p-card" style="padding: 28px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h3 style="font-size: 1.1rem; color: var(--text); font-weight: 700; margin-bottom: 6px;">Tema Tampilan</h3>
+            <p style="font-size: 0.85rem; color: var(--text-2);">Pilih tampilan tema gelap atau terang untuk aplikasi RIPPLE.</p>
+          </div>
+          <div class="theme-switch-wrapper" style="display: flex; gap: 8px;">
+            <button id="theme-btn-dark" class="btn btn-ghost" style="padding: 10px 16px; border-radius: 8px;" onclick="window.setTheme('dark')">🌙 Gelap</button>
+            <button id="theme-btn-light" class="btn btn-ghost" style="padding: 10px 16px; border-radius: 8px;" onclick="window.setTheme('light')">☀️ Terang</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Account Placeholder Card -->
+      <div class="card p-card" style="padding: 28px;">
+        <h3 style="font-size: 1.1rem; color: var(--text); font-weight: 700; margin-bottom: 6px;">Akun & Privasi</h3>
+        <p style="font-size: 0.85rem; color: var(--text-2); margin-bottom: 20px;">Kelola preferensi akun dan tingkat privasi data simulasi bumimu.</p>
+        <button class="btn btn-ghost" style="font-size: 0.85rem; border-color: rgba(239, 68, 68, 0.3); color: var(--red);">Hapus Semua Data Simulasi</button>
+      </div>
+
     </div>
   </div>
 </section>

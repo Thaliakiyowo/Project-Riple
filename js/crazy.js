@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Custom Cursor
     initCursor();
     
-    // Initialize Neon Borders
-    initNeonBorders();
+    // Neon Borders disabled by user request
+    // initNeonBorders();
 });
 
 // ── 1. Custom Stardust Cursor ──────────────────────────────

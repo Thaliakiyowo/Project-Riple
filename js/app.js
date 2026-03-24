@@ -42,13 +42,23 @@ window.addEventListener('DOMContentLoaded', async () => {
     const avatarUrl = `url('https://api.dicebear.com/7.x/notionists/svg?seed=${cleanName}&backgroundColor=f97316')`;
     
     // Profile Page
-    const pName = document.getElementById('p-name');
-    const pEmail = document.getElementById('p-email');
-    const pAv = document.getElementById('p-avatar-large');
+    const pMission = document.getElementById('p-mission');
     
     if(pName) pName.textContent = cleanName;
     if(pEmail) pEmail.textContent = name.includes('@') ? name : `${cleanName.toLowerCase().replace(/\s/g,'')}@earthmirror.id`;
     if(pAv) pAv.style.backgroundImage = avatarUrl;
+    if(pMission) pMission.textContent = localStorage.getItem('ripple_mission') || 'Menyelamatkan Lingkungan';
+    
+    const sIG = localStorage.getItem('ripple_ig') || '';
+    const sX = localStorage.getItem('ripple_x') || '';
+    const sFB = localStorage.getItem('ripple_fb') || '';
+    const pSocIG = document.getElementById('p-soc-ig');
+    const pSocX = document.getElementById('p-soc-x');
+    const pSocFB = document.getElementById('p-soc-fb');
+    
+    if(pSocIG) { pSocIG.href = sIG || '#'; pSocIG.style.opacity = sIG ? '1' : '0.5'; pSocIG.style.pointerEvents = sIG ? 'auto' : 'none'; }
+    if(pSocX) { pSocX.href = sX || '#'; pSocX.style.opacity = sX ? '1' : '0.5'; pSocX.style.pointerEvents = sX ? 'auto' : 'none'; }
+    if(pSocFB) { pSocFB.href = sFB || '#'; pSocFB.style.opacity = sFB ? '1' : '0.5'; pSocFB.style.pointerEvents = sFB ? 'auto' : 'none'; }
     
     // Sidebar Profile
     const sName = document.getElementById('nav-profile-name');
@@ -239,6 +249,126 @@ window.handleLogout = function() {
   window.location.href = 'login.html';
 };
 
+// ── Theme Settings ────────────────────────────────────────────
+window.setTheme = function(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('ripple_theme', theme);
+  
+  const btnDark = document.getElementById('theme-btn-dark');
+  const btnLight = document.getElementById('theme-btn-light');
+  
+  if (btnDark && btnLight) {
+    btnDark.style.background = theme === 'dark' ? 'rgba(249,115,22,0.1)' : 'transparent';
+    btnDark.style.color = theme === 'dark' ? '#f97316' : 'var(--text-2)';
+    btnDark.style.borderColor = theme === 'dark' ? '#f97316' : 'transparent';
+    
+    btnLight.style.background = theme === 'light' ? 'rgba(249,115,22,0.1)' : 'transparent';
+    btnLight.style.color = theme === 'light' ? '#f97316' : 'var(--text-2)';
+    btnLight.style.borderColor = theme === 'light' ? '#f97316' : 'transparent';
+  }
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  const currentTheme = localStorage.getItem('ripple_theme') || 'dark';
+  window.setTheme(currentTheme);
+});
+
+// ── Profile Settings ──────────────────────────────────────────
+window.isEditingProfile = false;
+
+window.editProfile = function(btn) {
+  const nameEl = document.getElementById('p-name');
+  const missionEl = document.getElementById('p-mission');
+  const socialsEl = document.getElementById('p-socials');
+  
+  if (!window.isEditingProfile) {
+    window.isEditingProfile = true;
+    btn.innerHTML = '💾';
+    btn.style.color = '#22c55e'; // Save color
+    
+    const currentName = nameEl.textContent;
+    const currentMission = missionEl.textContent;
+    const currentIG = localStorage.getItem('ripple_ig') || '';
+    const currentX = localStorage.getItem('ripple_x') || '';
+    const currentFB = localStorage.getItem('ripple_fb') || '';
+    
+    nameEl.innerHTML = `<input type="text" id="edit-p-name" value="${currentName}" class="em-chat-input" style="font-size:1.2rem; padding:4px 12px; height:auto; width:100%; margin-bottom: 8px; font-family: var(--font-display);">`;
+    missionEl.innerHTML = `<input type="text" id="edit-p-mission" value="${currentMission}" class="em-chat-input" style="font-size:0.88rem; padding:4px 8px; height:auto; width:220px; display:inline-block; margin-top:4px;">`;
+    
+    socialsEl.innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:6px; margin-top:10px; width: 100%;">
+        <input type="text" id="edit-p-ig" placeholder="URL Instagram (https://ig...)" value="${currentIG}" class="em-chat-input" style="font-size:0.8rem; padding:4px 8px; width:100%; height:auto;">
+        <input type="text" id="edit-p-x" placeholder="URL X/Twitter..." value="${currentX}" class="em-chat-input" style="font-size:0.8rem; padding:4px 8px; width:100%; height:auto;">
+        <input type="text" id="edit-p-fb" placeholder="URL Facebook..." value="${currentFB}" class="em-chat-input" style="font-size:0.8rem; padding:4px 8px; width:100%; height:auto;">
+      </div>
+    `;
+    
+    document.getElementById('edit-p-name').focus();
+    
+  } else {
+    window.isEditingProfile = false;
+    btn.innerHTML = '✎';
+    btn.style.color = '';
+    
+    let newName = document.getElementById('edit-p-name')?.value || 'Pelajar';
+    let newMission = document.getElementById('edit-p-mission')?.value || 'Menyelamatkan Lingkungan';
+    
+    const newIG = document.getElementById('edit-p-ig')?.value.trim() || '';
+    const newX = document.getElementById('edit-p-x')?.value.trim() || '';
+    const newFB = document.getElementById('edit-p-fb')?.value.trim() || '';
+    
+    newName = newName.trim() || 'Pelajar';
+    newMission = newMission.trim() || 'Menyelamatkan Lingkungan';
+    
+    localStorage.setItem('ripple_name', newName);
+    localStorage.setItem('ripple_mission', newMission);
+    localStorage.setItem('ripple_ig', newIG);
+    localStorage.setItem('ripple_x', newX);
+    localStorage.setItem('ripple_fb', newFB);
+    
+    if (typeof state !== 'undefined') {
+      state.userName = newName;
+      if (typeof saveState === 'function') saveState();
+    }
+    
+    nameEl.textContent = newName;
+    missionEl.textContent = newMission;
+    socialsEl.innerHTML = `
+      <a href="${newIG || '#'}" target="_blank" class="p-social-icon" id="p-soc-ig" style="${newIG ? '' : 'opacity:0.5; pointer-events:none;'}">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      </a>
+      <a href="${newX || '#'}" target="_blank" class="p-social-icon" id="p-soc-x" style="${newX ? '' : 'opacity:0.5; pointer-events:none;'}">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.008 4.076H5.078z"/></svg>
+      </a>
+      <a href="${newFB || '#'}" target="_blank" class="p-social-icon" id="p-soc-fb" style="${newFB ? '' : 'opacity:0.5; pointer-events:none;'}">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+    `;
+    
+    const elementsToUpdate = ['nav-profile-name'];
+    elementsToUpdate.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = newName;
+    });
+    
+    const avatarUrl = `url('https://api.dicebear.com/7.x/notionists/svg?seed=${newName.split('@')[0]}&backgroundColor=f97316')`;
+    const avatarElements = ['p-avatar-large', 'nav-profile-avatar'];
+    avatarElements.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.backgroundImage = avatarUrl;
+    });
+    
+    const pEmail = document.getElementById('p-email');
+    if (pEmail) {
+      if (!newName.includes('@')) {
+        pEmail.textContent = newName.toLowerCase().replace(/\s/g,'') + '@earthmirror.id';
+      } else {
+        pEmail.textContent = newName;
+      }
+    }
+  }
+};
+
 const TEAM_RESPONSES = {
   'apa itu': 'Ripple adalah platform Earth Mirror yang mengubah kebiasaan harianmu menjadi simulasi visual bumi secara real-time. Semakin positif pilihanmu, semakin hijau buminya! 🌍',
   'gabung': 'Wah, kami selalu mencari talenta baru! Kamu punya minat di riset, desain UI/UX, atau web dev? Kirim kontakmu ke team@ripple.id ya! 🚀',
@@ -302,8 +432,17 @@ function showSection(name) {
   document.querySelectorAll('[data-section]').forEach(el => {
     el.classList.remove('active');
   });
-  const target = document.querySelector(`[data-section="${name}"]`);
-  if (target) target.classList.add('active');
+  
+  if (name === 'landing' || name === 'about') {
+    const landing = document.querySelector('[data-section="landing"]');
+    const about = document.querySelector('[data-section="about"]');
+    if (landing) landing.classList.add('active');
+    if (about) about.classList.add('active');
+  } else {
+    const target = document.querySelector(`[data-section="${name}"]`);
+    if (target) target.classList.add('active');
+  }
+  
   currentSection = name;
 
   // Update nav active state
@@ -311,8 +450,15 @@ function showSection(name) {
     btn.classList.toggle('active', btn.dataset.nav === name);
   });
 
-  // Scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Scroll to top or to 'about' section
+  if (name === 'about') {
+    const aboutSec = document.querySelector('[data-section="about"]');
+    if (aboutSec) {
+      aboutSec.scrollIntoView({ behavior: 'smooth' });
+    }
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   // Stagger animations
   setTimeout(() => {

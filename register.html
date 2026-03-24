@@ -3,6 +3,13 @@
 <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.3/dist/dotlottie-wc.js" type="module"></script>
 <html lang="id">
 <head>
+  <script>
+    (function() {
+      if (localStorage.getItem('ripple_theme') === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daftar — RIPPLE Earth Mirror</title>

@@ -740,11 +740,19 @@ body { padding-bottom: 36px; }
 }
 
 /* ============================================================
+   SETTINGS DASHBOARD
+   ============================================================ */
+#section-settings { display: none; padding-top: 100px; }
+#section-settings.active { display: block; }
+
+/* ============================================================
    PROFILE DASHBOARD
    ============================================================ */
 #section-profile {
+  display: none;
   padding: 40px; max-width: 1100px; margin: 0 auto;
 }
+#section-profile.active { display: block; }
 .profile-header {
   display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
 }
@@ -825,7 +833,7 @@ body { padding-bottom: 36px; }
 }
 .pt-item.completed .pt-dot { border-color: #f97316; background: #f97316; box-shadow: 0 0 10px rgba(249,115,22,0.5); }
 .pt-content {
-  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 18px; border-radius: 16px;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 18px 64px 18px 18px; border-radius: 16px;
   flex: 1; transition: 0.2s; display: flex; flex-direction: column;
 }
 .pt-content:hover { background: rgba(255,255,255,0.05); }
@@ -857,3 +865,22 @@ body { padding-bottom: 36px; }
   .profile-actions { flex-direction: column; align-items: stretch; }
   .p-search-box input { width: 100%; }
 }
+
+/* -- Light Mode Component Overrides ------------------------ */
+[data-theme="light"] .card, [data-theme="light"] .about-card { background: linear-gradient(145deg, rgba(249,115,22,0.02), rgba(255,255,255,0.8)); }
+[data-theme="light"] #nav { background: rgba(248, 250, 252, 0.98); }
+[data-theme="light"] .nav-link-btn { color: var(--text-2); }
+[data-theme="light"] .nav-link-btn:hover { background: rgba(0,0,0,0.05); color: var(--text); }
+[data-theme="light"] .top-ticker, [data-theme="light"] .bottom-ticker, [data-theme="light"] .live-badge-wrapper { background: rgba(248, 250, 252, 0.98); }
+[data-theme="light"] .nav-profile-name { color: var(--text); }
+[data-theme="light"] .em-card { background: rgba(255,255,255,0.92); }
+[data-theme="light"] .em-dim-card { background: rgba(248,250,252,0.8); }
+[data-theme="light"] .em-fact-box, [data-theme="light"] .em-collective { background: rgba(248,250,252,0.7); }
+[data-theme="light"] .em-ai-response { background: rgba(241,245,249,0.8); border: 1px solid rgba(0,0,0,0.1); }
+[data-theme="light"] .em-chat-input { background: #fff; }
+[data-theme="light"] .em-pulse-stats { background: #fff; }
+[data-theme="light"] .p-card { background: rgba(255,255,255,0.8); }
+[data-theme="light"] .auth-wrapper { background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(248,250,252,0.98)); }
+[data-theme="light"] .auth-left { background: linear-gradient(160deg, rgba(255,245,235,0.6) 0%, rgba(255,255,255,0.8) 100%); }
+[data-theme="light"] .auth-input { background: #fff; }
+[data-theme="light"] body { background: var(--bg); }
