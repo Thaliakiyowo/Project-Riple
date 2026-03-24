@@ -867,20 +867,27 @@ body { padding-bottom: 36px; }
 }
 
 /* -- Light Mode Component Overrides ------------------------ */
-[data-theme="light"] .card, [data-theme="light"] .about-card { background: linear-gradient(145deg, rgba(249,115,22,0.02), rgba(255,255,255,0.8)); }
-[data-theme="light"] #nav { background: rgba(248, 250, 252, 0.98); }
-[data-theme="light"] .nav-link-btn { color: var(--text-2); }
-[data-theme="light"] .nav-link-btn:hover { background: rgba(0,0,0,0.05); color: var(--text); }
-[data-theme="light"] .top-ticker, [data-theme="light"] .bottom-ticker, [data-theme="light"] .live-badge-wrapper { background: rgba(248, 250, 252, 0.98); }
+[data-theme="light"] .card, [data-theme="light"] .about-card { background: linear-gradient(145deg, rgba(241,245,249,0.95), rgba(226,232,240,0.95)); border: 1px solid rgba(0,0,0,0.12); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+[data-theme="light"] #nav { background: rgba(241, 245, 249, 0.98); border-right: 1px solid rgba(0,0,0,0.1); }
+[data-theme="light"] .nav-link-btn { color: var(--text-2); font-weight: 600; }
+[data-theme="light"] .nav-link-btn:hover { background: rgba(0,0,0,0.08); color: var(--text); }
+[data-theme="light"] .top-ticker, [data-theme="light"] .bottom-ticker, [data-theme="light"] .live-badge-wrapper { background: rgba(241, 245, 249, 0.98); border-bottom: 1px solid rgba(0,0,0,0.1); }
 [data-theme="light"] .nav-profile-name { color: var(--text); }
-[data-theme="light"] .em-card { background: rgba(255,255,255,0.92); }
-[data-theme="light"] .em-dim-card { background: rgba(248,250,252,0.8); }
-[data-theme="light"] .em-fact-box, [data-theme="light"] .em-collective { background: rgba(248,250,252,0.7); }
-[data-theme="light"] .em-ai-response { background: rgba(241,245,249,0.8); border: 1px solid rgba(0,0,0,0.1); }
-[data-theme="light"] .em-chat-input { background: #fff; }
-[data-theme="light"] .em-pulse-stats { background: #fff; }
-[data-theme="light"] .p-card { background: rgba(255,255,255,0.8); }
-[data-theme="light"] .auth-wrapper { background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(248,250,252,0.98)); }
-[data-theme="light"] .auth-left { background: linear-gradient(160deg, rgba(255,245,235,0.6) 0%, rgba(255,255,255,0.8) 100%); }
-[data-theme="light"] .auth-input { background: #fff; }
-[data-theme="light"] body { background: var(--bg); }
+[data-theme="light"] .em-card { background: rgba(248,250,252,0.98); border: 2px solid rgba(0,0,0,0.15); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+[data-theme="light"] .em-dim-card { background: rgba(226,232,240,0.95); border: 2px solid rgba(0,0,0,0.12); box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
+[data-theme="light"] .em-fact-box, [data-theme="light"] .em-collective { background: rgba(226,232,240,0.95); border: 2px solid rgba(0,0,0,0.12); box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
+[data-theme="light"] .em-ai-response { background: rgba(226,232,240,0.95); border: 2px solid rgba(0,0,0,0.15); }
+[data-theme="light"] .em-chat-input { background: #f8fafc; border: 2px solid rgba(0,0,0,0.18); font-weight: 600; }
+[data-theme="light"] .em-pulse-stats { background: #f8fafc; border: 2px solid rgba(0,0,0,0.15); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+[data-theme="light"] .p-card { background: rgba(248,250,252,0.95); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+[data-theme="light"] .auth-wrapper { background: linear-gradient(145deg, rgba(241,245,249,0.95), rgba(226,232,240,0.98)); }
+[data-theme="light"] .auth-left { background: linear-gradient(160deg, rgba(249,115,22,0.05) 0%, rgba(226,232,240,0.8) 100%); }
+[data-theme="light"] .auth-input { background: #f8fafc; border: 1px solid rgba(0,0,0,0.15); }
+[data-theme="light"] body { background: var(--bg); font-weight: 500; }
+[data-theme="light"] h1, [data-theme="light"] h2, [data-theme="light"] h3, [data-theme="light"] h4, [data-theme="light"] h5 { font-weight: 800; }
+[data-theme="light"] .btn { font-weight: 700; }
+[data-theme="light"] .p-card h3, [data-theme="light"] .p-stat-val, [data-theme="light"] .pt-header h4, [data-theme="light"] .ps-tier h4 { color: var(--text); }
+[data-theme="light"] .pt-content { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); }
+[data-theme="light"] .pt-content p { color: var(--text-2); }
+[data-theme="light"] .pt-date { color: var(--text-3); }
+[data-theme="light"] .p-stat-label, [data-theme="light"] .ps-benefits li, [data-theme="light"] .ps-progress { color: var(--text-2); }
