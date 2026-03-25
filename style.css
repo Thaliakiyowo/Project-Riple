@@ -1,0 +1,100 @@
+/* ══════════════════════════════════════════════
+   RIPPLE — Theme Variables
+   Supports: [data-theme="dark"] (default) & [data-theme="light"]
+══════════════════════════════════════════════ */
+
+/* ── BRAND COLORS (tetap sama di semua tema) ── */
+:root {
+  --cream: #e8d8c9;
+  --navy: #4b607f;
+  --sand: #dcc9a9;
+  --red: #b83a2d;
+  --forest: #4e6851;
+  --orange: #f3701e;
+  --sw: 220px;
+
+  /* Transition untuk semua perubahan tema */
+  --theme-transition:
+    background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+/* ══════════════════════════════
+   DARK THEME (default)
+══════════════════════════════ */
+:root,
+[data-theme="dark"] {
+  --bg: #0f0b09;
+  --bg2: #1a1210ee;
+  --bg3: #221815cc;
+  --bg4: #2c1f1a;
+
+  --txt: #e8d8c9;
+  --muted: #8a7060;
+  --dim: #4a3530;
+  --border: rgba(232, 216, 201, 0.08);
+  --borderg: rgba(220, 201, 169, 0.22);
+
+  --aurora1: rgba(78, 104, 81, 0.18);
+  --aurora2: rgba(75, 96, 127, 0.15);
+  --aurora3: rgba(184, 58, 45, 0.12);
+  --aurora4: rgba(140, 60, 180, 0.1);
+
+  /* Panel/card backgrounds */
+  --panel-bg: rgba(15, 10, 8, 0.55);
+  --panel-bg-solid: rgba(16, 10, 8, 0.82);
+  --sidebar-bg: rgba(12, 8, 6, 0.9);
+  --topbar-bg: rgba(10, 6, 4, 0.75);
+  --input-bg: rgba(15, 10, 8, 0.7);
+  --card-bg: rgba(34, 24, 21, 0.6);
+  --chip-bg: rgba(20, 14, 12, 0.9);
+
+  /* Radial overlay inside ripple box */
+  --ripple-vignette: rgba(8, 4, 2, 0.75);
+
+  /* Grain opacity */
+  --grain-opacity: 0.022;
+
+  /* Theme toggle icon */
+  --theme-icon: "☀️";
+  --theme-label: "Mode Terang";
+}
+
+/* ══════════════════════════════
+   LIGHT THEME
+══════════════════════════════ */
+[data-theme="light"] {
+  --bg: #f0e6da;
+  --bg2: #e8d9caee;
+  --bg3: #deccbacc;
+  --bg4: #d3bfa9;
+
+  --txt: #1e140f;
+  --muted: #5c4235;
+  --dim: #9a7b6a;
+  --border: rgba(80, 50, 35, 0.15);
+  --borderg: rgba(80, 50, 35, 0.3);
+
+  --aurora1: rgba(78, 104, 81, 0.1);
+  --aurora2: rgba(75, 96, 127, 0.08);
+  --aurora3: rgba(184, 58, 45, 0.07);
+  --aurora4: rgba(140, 60, 180, 0.06);
+
+  /* Panel/card backgrounds */
+  --panel-bg: rgba(255, 248, 240, 0.88);
+  --panel-bg-solid: rgba(252, 244, 234, 0.97);
+  --sidebar-bg: rgba(248, 238, 226, 0.98);
+  --topbar-bg: rgba(246, 236, 224, 0.96);
+  --input-bg: rgba(255, 252, 248, 0.95);
+  --card-bg: rgba(240, 228, 214, 0.9);
+  --chip-bg: rgba(252, 244, 234, 0.98);
+
+  /* Radial overlay inside ripple box */
+  --ripple-vignette: rgba(230, 215, 195, 0.5);
+
+  /* Grain opacity */
+  --grain-opacity: 0.012;
+
+  /* Theme toggle icon */
+  --theme-icon: "🌙";
+  --theme-label: "Mode Gelap";
+}

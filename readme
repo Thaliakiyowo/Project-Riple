@@ -1,0 +1,62 @@
+# RIPPLE — Struktur File
+
+## Cara Penggunaan
+
+Buka langsung `Daily_input.html` atau `riple_mind.html` di browser.
+Kedua file sudah **standalone** (semua CSS & JS sudah tertanam di dalam file HTML).
+
+File terpisah di folder `css/` dan `js/` tersedia jika kamu ingin deploy
+sebagai multi-file project.
+
+---
+
+## Struktur File
+
+```
+ripple/
+├── Daily_input.html       ← Standalone (buka langsung di browser)
+├── riple_mind.html        ← Standalone (buka langsung di browser)
+│
+├── css/
+│   ├── theme.css          ← Variabel tema gelap/terang (shared)
+│   ├── daily_input.css    ← Style khusus Daily Input
+│   └── riple_mind.css     ← Style khusus Ripple Mind
+│
+└── js/
+    ├── theme.js           ← Logika toggle tema (shared)
+    ├── daily_input.js     ← Logika Daily Input
+    └── riple_mind.js      ← Logika Ripple Mind
+```
+
+---
+
+## Fitur Pengaturan & Tema
+
+### Cara membuka panel pengaturan:
+
+- Klik tombol **⚙️** di topbar kanan atas, atau
+- Klik tombol **Pengaturan** di bagian bawah sidebar
+
+### Di dalam panel pengaturan kamu bisa:
+
+- 🌙 / ☀️ **Toggle Mode Gelap / Terang** — Tema tersimpan otomatis di localStorage
+- 👤 **Edit Profil** — Ubah nama pengguna
+- 🗑️ **Hapus Data** — Reset streak, history, dan profil
+
+### Tema tersimpan di:
+
+`localStorage["ripple_theme"]` → nilai: `"dark"` atau `"light"`
+
+---
+
+## Variabel CSS Tema
+
+| Variabel       | Dark                 | Light                    |
+| -------------- | -------------------- | ------------------------ |
+| `--bg`         | `#0f0b09`            | `#f5ede4`                |
+| `--txt`        | `#e8d8c9`            | `#2c1f1a`                |
+| `--muted`      | `#8a7060`            | `#7a5f50`                |
+| `--panel-bg`   | `rgba(15,10,8,0.55)` | `rgba(245,237,228,0.75)` |
+| `--sidebar-bg` | `rgba(12,8,6,0.9)`   | `rgba(240,230,218,0.96)` |
+
+Warna brand (orange, red, forest, navy, cream) **tidak berubah** di kedua tema.
